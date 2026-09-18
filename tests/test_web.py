@@ -39,7 +39,7 @@ class TestServidor(BaseWeb):
     def test_pagina_inicial(self):
         with urllib.request.urlopen(self.base + "/") as resposta:
             corpo = resposta.read().decode()
-        self.assertIn("Anonimizador de peças judiciais", corpo)
+        self.assertIn("Anonimizador de dados para IA", corpo)
 
     def test_estado_lista_perfis_e_situacao_do_llm(self):
         estado = self.pedir("/api/estado")
