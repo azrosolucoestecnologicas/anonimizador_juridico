@@ -163,9 +163,11 @@ class AgenteAnonimizador:
             if len(trecho) < 3:
                 continue
             tipo = tipos.get(trecho, T.DADO_SENSIVEL)
-            for m in re.finditer(re.escape(trecho), texto):
+            # Guarda de fronteira: o retrabalho não pode casar o trecho dentro
+            # de outro número e reescrever o que não é dado pessoal.
+            for inicio, fim in detectores.posicoes_literais(trecho, texto):
                 achados.append(T.Ocorrencia(
-                    tipo=tipo, valor=trecho, inicio=m.start(), fim=m.end(),
+                    tipo=tipo, valor=trecho, inicio=inicio, fim=fim,
                     confianca=1.0, origem="auditor",
                     motivo="trecho exigido pela auditoria",
                 ))
@@ -227,9 +229,9 @@ class AgenteAnonimizador:
                 confianca = 0.7
             if confianca < self.confianca_minima:
                 continue
-            for m in re.finditer(re.escape(trecho), original):
+            for inicio, fim in detectores.posicoes_literais(trecho, original):
                 convertidas.append(T.Ocorrencia(
-                    tipo=tipo, valor=trecho, inicio=m.start(), fim=m.end(),
+                    tipo=tipo, valor=trecho, inicio=inicio, fim=fim,
                     confianca=confianca, origem="llm",
                     motivo=item.get("motivo", "detecção semântica"),
                 ))

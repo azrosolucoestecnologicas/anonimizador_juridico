@@ -222,7 +222,11 @@ class AgenteAuditor:
         for oc in detectores.varrer(original, confianca_minima=self.confianca_minima):
             if len(oc.valor.strip()) < 3 or oc.tipo in self.tipos_fora_de_escopo:
                 continue
-            if oc.valor in anonimizado:
+            # `in` confunde conter com ser: a conta "12345-6" está contida no
+            # processo "0012345-67.2024…" sem ser ele. O alarme falso daí virava
+            # retrabalho, e o retrabalho reescrevia o processo pela metade.
+            posicoes = detectores.posicoes_literais(oc.valor, anonimizado)
+            if posicoes:
                 achados.append(T.Achado(
                     categoria="vazamento_literal",
                     tipo=oc.tipo,
@@ -232,7 +236,7 @@ class AgenteAuditor:
                         "literalmente no texto anonimizado"
                     ),
                     trecho=oc.valor,
-                    posicao=anonimizado.find(oc.valor),
+                    posicao=posicoes[0][0],
                     origem="regra",
                 ))
         return achados

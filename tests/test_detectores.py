@@ -101,6 +101,64 @@ class TestRecorteDeNomes(unittest.TestCase):
                              ocorrencia.valor)
 
 
+class TestGrafiasQueEscapavam(unittest.TestCase):
+    """Dois falsos negativos achados rodando peça real contra o pipeline.
+
+    Ambos são de grafia, não de detecção: o dado estava lá, escrito como
+    advogado escreve, e a regra exigia a forma de manual.
+    """
+
+    @staticmethod
+    def _tipos(texto):
+        return {o.tipo: texto[o.inicio:o.fim]
+                for o in detectores.resolver_sobreposicoes(
+                    detectores.varrer(texto, confianca_minima=0.45))}
+
+    def test_pis_fora_da_mascara_canonica(self):
+        """120.6194.522-0 é PIS válido agrupado 3.4.3-1 em vez de 3.5.2-1.
+        A regra canônica não casava e a de 11 dígitos nus quebrava no ponto,
+        então metade do número virava RG e o resto sobrava em claro."""
+        achados = self._tipos("PIS 120.6194.522-0, CTPS 98765")
+        self.assertEqual(achados.get(T.PIS), "120.6194.522-0")
+
+    def test_conta_sem_a_palavra_corrente(self):
+        """`contexto` só enxerga o que vem antes do número. Em
+        "conta 12345-6, agência 0987" a agência vem depois, e a lista exigia
+        "conta corrente" — a grafia mais comum da petição escapava."""
+        achados = self._tipos("conta 12345-6 agência 0987 do Banco do Brasil")
+        self.assertEqual(achados.get(T.CONTA_BANCARIA), "12345-6")
+
+    def test_afrouxar_o_separador_nao_abre_falso_positivo(self):
+        """O dígito verificador continua sendo a prova."""
+        self.assertNotIn(T.PIS, self._tipos("PIS 111.2222.333-4"))
+        self.assertNotIn(T.CONTA_BANCARIA,
+                         self._tipos("a conta de luz venceu em 10-2 do mês"))
+
+
+class TestFronteiraNaBuscaLiteral(unittest.TestCase):
+    """Busca literal crua confunde *conter* com *ser*.
+
+    A conta "12345-6" está contida no processo "0012345-67.2024.5.15.0001" sem
+    ter relação com ele. Sem guarda de fronteira o auditor acusava vazamento
+    onde não havia, o orquestrador mandava retrabalhar e o retrabalho reescrevia
+    o número do processo pela metade — anonimizar virava corromper.
+    """
+
+    def test_valor_curto_nao_casa_dentro_de_outro_numero(self):
+        texto = "conta 12345-6 agência 0987. Protocolo 0012345-67.2024.5.15.0001"
+        self.assertFalse(detectores.aparece_literalmente("12345-6", texto[14:]))
+        self.assertTrue(detectores.aparece_literalmente("12345-6", texto[:14]))
+
+    def test_propagacao_de_nome_continua_funcionando(self):
+        texto = "MARIA APARECIDA DOS SANTOS depôs. MARIA APARECIDA DOS SANTOS reiterou."
+        self.assertEqual(
+            len(detectores.posicoes_literais("MARIA APARECIDA DOS SANTOS", texto)), 2)
+
+    def test_pontas_nao_alfanumericas_nao_exigem_fronteira(self):
+        texto = "telefone (11) 98765-4321 do autor"
+        self.assertTrue(detectores.aparece_literalmente("(11) 98765-4321", texto))
+
+
 class TestResolucaoDeSobreposicao(unittest.TestCase):
     def test_trecho_mais_especifico_vence(self):
         ocorrencias = detectores.varrer("PIS 12012345672 do autor")

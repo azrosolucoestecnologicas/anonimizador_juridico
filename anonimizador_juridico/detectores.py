@@ -70,6 +70,14 @@ REGRAS: List[Regra] = [
           validador="TITULO_ELEITOR", confianca=0.8,
           contexto=r"t[ií]tulo|eleitor", prioridade=14),
     Regra(T.PIS, r"\b\d{3}\.\d{5}\.\d{2}-\d\b", validador="PIS", prioridade=15),
+    # A máscara canônica do PIS é 3.5.2-1, mas petição não obedece máscara:
+    # "120.6194.522-0" aparece no acervo real e escapava das duas regras — a
+    # canônica não casa o agrupamento e a de 11 dígitos nus quebra no ponto.
+    # O dígito verificador continua sendo a prova, então afrouxar o separador
+    # não abre porta para falso positivo.
+    Regra(T.PIS, r"\b\d{3}[.\s-]?\d{4,5}[.\s-]?\d{2,3}[-.\s]?\d\b",
+          validador="PIS", confianca=0.9, contexto=r"pis|pasep|nit",
+          prioridade=16),
     # Prioridade abaixo do CPF "nu" (12): um número de 11 dígitos rotulado como
     # PIS/CNH no próprio texto é classificação mais específica do que o mero
     # fato de o dígito verificador também fechar como CPF.
@@ -85,9 +93,14 @@ REGRAS: List[Regra] = [
           contexto=r"ctps|carteira de trabalho", prioridade=21),
     Regra(T.MATRICULA, r"\b\d{4,12}\b", confianca=0.7,
           contexto=r"matr[íi]cula|registro funcional|prontu[áa]rio", prioridade=22),
+    # `contexto` só enxerga o que vem ANTES do número. "conta 12345-6, agência
+    # 0987" é a grafia mais comum na petição e escapava: o que precede é só
+    # "conta", e a lista exigia "conta corrente". A agência, que vem depois,
+    # nunca era vista. Daí `\bconta\b` isolado na lista.
     Regra(T.CONTA_BANCARIA,
-          r"\b\d{1,5}-?\d?\s*/\s*\d{4,12}-?\d?\b|\b\d{4,12}-\d\b", confianca=0.8,
-          contexto=r"ag[êe]ncia|conta corrente|conta poupan[çc]a|banco|c/c",
+          r"\b\d{1,5}-?\d?\s*/\s*\d{4,12}-?\d?\b|\b\d{1,3}\.?\d{3,9}-\d\b",
+          confianca=0.8,
+          contexto=r"ag[êe]ncia|\bconta\b|poupan[çc]a|banco|c/c",
           prioridade=23),
     Regra(T.CHAVE_PIX,
           r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b",
@@ -381,6 +394,32 @@ def resolver_sobreposicoes(ocorrencias: Sequence[T.Ocorrencia]) -> List[T.Ocorre
     return sorted(mantidas, key=lambda o: o.inicio)
 
 
+def padrao_literal(valor: str) -> str:
+    """`re.escape` com guarda de fronteira nas pontas alfanuméricas.
+
+    Existe porque busca literal crua confunde *conter* com *ser*: a conta
+    "12345-6" está contida no processo "0012345-67.2024.5.15.0001" sem ter
+    nada a ver com ele. Sem a guarda, o auditor acusava vazamento onde não
+    havia e o retrabalho reescrevia o número do processo pela metade.
+
+    A guarda só entra na ponta que é alfanumérica: valor entre parênteses ou
+    começando por pontuação não deve exigir fronteira que nunca existiria.
+    """
+    antes = r"(?<!\w)" if valor[:1].isalnum() else ""
+    depois = r"(?!\w)" if valor[-1:].isalnum() else ""
+    return antes + re.escape(valor) + depois
+
+
+def posicoes_literais(valor: str, texto: str) -> List[tuple]:
+    """Onde `valor` aparece em `texto` como unidade, não como pedaço de outra."""
+    return [(m.start(), m.end())
+            for m in re.finditer(padrao_literal(valor), texto)]
+
+
+def aparece_literalmente(valor: str, texto: str) -> bool:
+    return re.search(padrao_literal(valor), texto) is not None
+
+
 def propagar(texto: str, ocorrencias: Sequence[T.Ocorrencia]) -> List[T.Ocorrencia]:
     """Se "João da Silva" foi identificado uma vez, toda outra ocorrência
     literal dele no documento também é dado pessoal — mesmo onde a heurística
@@ -391,11 +430,11 @@ def propagar(texto: str, ocorrencias: Sequence[T.Ocorrencia]) -> List[T.Ocorrenc
         if len(oc.valor.strip()) >= 4:
             por_valor.setdefault(oc.valor, oc)
     for valor, modelo in por_valor.items():
-        for m in re.finditer(re.escape(valor), texto):
-            if any(o.inicio == m.start() and o.fim == m.end() for o in ocorrencias):
+        for inicio, fim in posicoes_literais(valor, texto):
+            if any(o.inicio == inicio and o.fim == fim for o in ocorrencias):
                 continue
             extras.append(T.Ocorrencia(
-                tipo=modelo.tipo, valor=valor, inicio=m.start(), fim=m.end(),
+                tipo=modelo.tipo, valor=valor, inicio=inicio, fim=fim,
                 confianca=modelo.confianca, origem="propagacao",
                 motivo="repetição literal de entidade já identificada",
             ))
