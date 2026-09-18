@@ -2,153 +2,398 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anonimizador de peças judiciais</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anonimizador de peças judiciais · AR</title>
 <style>
+  /* Identidade AR — arsolucoestecnologicas.com.br.
+     As famílias são declaradas com as alternativas documentadas na marca:
+     a política de segurança da página proíbe buscar recurso de terceiro
+     (nada entra, nada sai), então Fraunces/Hanken/JetBrains entram apenas
+     se estiverem instaladas na máquina. O desenho foi calibrado para ficar
+     correto nos dois casos. */
   :root{
-    --fundo:#f6f7f9; --papel:#fff; --borda:#dfe3e8; --texto:#1c2430;
-    --suave:#5c6b7a; --acento:#1f5f8b; --acento-claro:#e8f1f7;
-    --ok:#1b7f4d; --ok-claro:#e6f4ec; --alerta:#b3261e; --alerta-claro:#fdecea;
-    --atencao:#8a6100; --atencao-claro:#fdf3e2;
+    --navy:#0F2540; --navy-soft:#1A3556;
+    --copper:#B87333; --copper-soft:#D4966B;
+    --cream:#F5EFE4; --cream-warm:#EFE7D6;
+    --ink:#1A1A1A; --muted:#6B6256; --line:#DDD3C0;
+    --copper-veil:rgba(184,115,51,.18);
+
+    --fundo:var(--cream); --papel:#FFFDF8; --papel-2:var(--cream-warm);
+    --linha:var(--line); --titulo:var(--navy); --texto:var(--ink);
+    --suave:var(--muted); --acento:var(--copper); --acento-2:#9A5F28;
+    --ok:#1B6B45; --ok-veu:#E4F0E9;
+    --alerta:#9E2B22; --alerta-veu:#F8E6E4;
+    --atencao:#8A6100; --atencao-veu:#F6ECD8;
+
+    --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+    --font-sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    --raio:8px; --raio-g:12px;
   }
   @media (prefers-color-scheme: dark){
-    :root{ --fundo:#12161b; --papel:#1a2027; --borda:#2b343e; --texto:#e6ebf1;
-      --suave:#9aa8b6; --acento:#68b0e0; --acento-claro:#17303f;
-      --ok:#59c98c; --ok-claro:#12291e; --alerta:#ff8a80; --alerta-claro:#2c1614;
-      --atencao:#e2b25a; --atencao-claro:#2b2213; }
+    :root{
+      --fundo:#0A1729; --papel:#102336; --papel-2:#16304A;
+      --linha:rgba(245,239,228,.14); --titulo:var(--cream); --texto:#E9E3D6;
+      --suave:rgba(245,239,228,.60); --acento:var(--copper-soft); --acento-2:#E3AE86;
+      --ok:#6FD3A0; --ok-veu:rgba(111,211,160,.12);
+      --alerta:#FF9A90; --alerta-veu:rgba(255,154,144,.12);
+      --atencao:#E8BE72; --atencao-veu:rgba(232,190,114,.12);
+    }
   }
+
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--fundo);color:var(--texto);
-    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-  header{background:var(--papel);border-bottom:1px solid var(--borda);padding:18px 24px}
-  header h1{margin:0;font-size:19px;letter-spacing:-.2px}
-  header p{margin:4px 0 0;color:var(--suave);font-size:13px}
-  main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
-  .cartao{background:var(--papel);border:1px solid var(--borda);border-radius:10px;
-    padding:18px;margin-bottom:18px}
-  h2{font-size:14px;text-transform:uppercase;letter-spacing:.7px;color:var(--suave);
-    margin:0 0 12px}
-  .perfis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
-  .perfil{border:1.5px solid var(--borda);border-radius:8px;padding:12px;cursor:pointer;
-    transition:.12s}
+    font:16px/1.6 var(--font-sans);
+    -webkit-font-smoothing:antialiased}
+
+  /* ---- cabeçalho ------------------------------------------------------ */
+  header{background:var(--navy);color:var(--cream);
+    border-bottom:3px solid var(--copper)}
+  .cabecalho{max-width:1180px;margin:0 auto;padding:20px 24px;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .marca{display:flex;align-items:center;gap:14px;min-width:0}
+  .marca svg{width:44px;height:auto;flex:none;display:block}
+  .wordmark{font:500 10px/1.35 var(--font-mono);letter-spacing:.18em;
+    text-transform:uppercase;color:var(--copper-soft);white-space:nowrap}
+  .titulo-app{margin:0;font:400 23px/1.2 var(--font-display);
+    letter-spacing:-.02em;color:var(--cream)}
+  .titulo-app + p{margin:3px 0 0;font-size:13.5px;color:rgba(245,239,228,.68)}
+  .divisor-v{width:1px;align-self:stretch;background:rgba(245,239,228,.18);margin:0 4px}
+  .cabecalho .direita{margin-left:auto;display:flex;align-items:center;
+    gap:10px;flex-wrap:wrap}
+
+  .pilula{display:inline-flex;align-items:center;gap:6px;
+    font:500 11.5px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+    padding:6px 10px;border-radius:999px;border:1px solid rgba(245,239,228,.28);
+    color:rgba(245,239,228,.82);white-space:nowrap}
+  .pilula.viva{border-color:var(--copper-soft);color:var(--copper-soft);
+    background:rgba(184,115,51,.14)}
+  .ponto{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+
+  /* ---- estrutura ------------------------------------------------------ */
+  main{max-width:1180px;margin:0 auto;padding:30px 24px 96px}
+  .kicker{font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;
+    color:var(--acento);margin:0 0 10px;display:flex;align-items:center;gap:10px}
+  .kicker::after{content:"";height:1px;flex:1;background:var(--linha)}
+  .passo{display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;border-radius:50%;background:var(--acento);
+    color:var(--cream);font:600 11px/1 var(--font-sans);letter-spacing:0;flex:none}
+  @media (prefers-color-scheme: dark){ .passo{color:var(--navy)} }
+
+  .cartao{background:var(--papel);border:1px solid var(--linha);
+    border-radius:var(--raio-g);padding:22px;margin-bottom:20px}
+  h2{font:400 19px/1.3 var(--font-display);letter-spacing:-.01em;
+    color:var(--titulo);margin:0 0 4px}
+  h3{font:400 18px/1.3 var(--font-display);letter-spacing:-.01em;
+    color:var(--titulo);margin:0}
+  h4{font:600 13px/1.4 var(--font-sans);color:var(--titulo);margin:0 0 6px}
+  .legenda{color:var(--suave);font-size:13.5px;margin:0 0 16px}
+
+  /* ---- perfis --------------------------------------------------------- */
+  .perfis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr))}
+  .perfil{border:1px solid var(--linha);border-radius:var(--raio);padding:14px 16px;
+    cursor:pointer;background:var(--fundo);transition:border-color .15s,background .15s;
+    position:relative}
   .perfil:hover{border-color:var(--acento)}
-  .perfil.ativo{border-color:var(--acento);background:var(--acento-claro)}
-  .perfil b{display:block;font-size:14px;margin-bottom:4px}
-  .perfil span{font-size:12.5px;color:var(--suave)}
-  #zona{border:2px dashed var(--borda);border-radius:10px;padding:26px;text-align:center;
-    cursor:pointer;color:var(--suave);transition:.12s}
-  #zona.sobre{border-color:var(--acento);background:var(--acento-claro);color:var(--acento)}
-  textarea{width:100%;min-height:120px;padding:11px;border:1px solid var(--borda);
-    border-radius:8px;background:var(--fundo);color:var(--texto);font-family:inherit;
-    font-size:14px;resize:vertical}
-  .linha{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
-  button{background:var(--acento);color:#fff;border:0;border-radius:8px;
-    padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
-  button.secundario{background:transparent;color:var(--acento);
-    border:1.5px solid var(--borda)}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  label.caixa{display:flex;gap:7px;align-items:center;font-size:13.5px;color:var(--suave)}
-  .aviso{font-size:12.5px;color:var(--suave);margin-top:10px}
-  ul.arquivos{list-style:none;padding:0;margin:12px 0 0;font-size:13.5px}
-  ul.arquivos li{display:flex;justify-content:space-between;padding:6px 10px;
-    background:var(--fundo);border-radius:6px;margin-bottom:5px}
-  ul.arquivos button{background:none;color:var(--alerta);padding:0 4px;font-size:16px}
-  .selo{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;
-    font-weight:700}
-  .selo.ok{background:var(--ok-claro);color:var(--ok)}
-  .selo.mau{background:var(--alerta-claro);color:var(--alerta)}
-  .selo.neutro{background:var(--acento-claro);color:var(--acento)}
-  .doc h3{margin:0;font-size:15px;display:flex;gap:10px;align-items:center}
-  pre{background:var(--fundo);border:1px solid var(--borda);border-radius:8px;
-    padding:12px;max-height:340px;overflow:auto;white-space:pre-wrap;
-    font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  mark{background:var(--acento-claro);color:var(--acento);font-weight:600;
-    padding:0 2px;border-radius:3px}
-  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
-  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--borda)}
-  th{color:var(--suave);font-weight:600}
-  .quarentena{
-    border:2px solid var(--alerta);background:var(--alerta-claro);
-    border-radius:10px;padding:16px 18px;margin-bottom:16px;
+  .perfil.ativo{border-color:var(--acento);background:var(--copper-veil);
+    box-shadow:inset 3px 0 0 var(--acento)}
+  .perfil b{display:block;font:600 14.5px/1.3 var(--font-sans);color:var(--titulo);
+    margin-bottom:5px}
+  .perfil span{font-size:13px;color:var(--suave);display:block}
+  .perfil i{color:var(--acento);font-style:italic}
+  .perfil .preserva{margin-top:7px;font:500 11px/1.4 var(--font-mono);
+    letter-spacing:.04em;color:var(--suave)}
+
+  /* ---- entrada -------------------------------------------------------- */
+  #zona{border:1.5px dashed var(--linha);border-radius:var(--raio);padding:30px 20px;
+    text-align:center;cursor:pointer;color:var(--suave);background:var(--fundo);
+    transition:.15s}
+  #zona:hover{border-color:var(--acento);color:var(--acento)}
+  #zona.sobre{border-color:var(--acento);background:var(--copper-veil);color:var(--acento)}
+  #zona b{display:block;font:600 15px/1.4 var(--font-sans);color:var(--titulo);
+    margin-bottom:4px}
+  #zona.sobre b{color:var(--acento)}
+  .formatos{font:500 11px/1.4 var(--font-mono);letter-spacing:.06em;
+    color:var(--suave);margin-top:8px;display:block}
+
+  .arquivos{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:7px}
+  .arquivos li{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--papel-2);border:1px solid var(--linha);border-radius:var(--raio);
+    padding:9px 12px;font-size:13.5px}
+  .arquivos .peso{font:400 12px/1 var(--font-mono);color:var(--suave)}
+  .arquivos button{background:none;border:0;color:var(--suave);cursor:pointer;
+    font-size:19px;line-height:1;padding:0 4px}
+  .arquivos button:hover{color:var(--alerta)}
+
+  .ou{display:flex;align-items:center;gap:12px;margin:16px 0 12px;
+    font:500 11px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--suave)}
+  .ou::before,.ou::after{content:"";height:1px;flex:1;background:var(--linha)}
+
+  textarea{width:100%;min-height:128px;padding:13px 14px;border:1px solid var(--linha);
+    border-radius:var(--raio);background:var(--fundo);color:var(--texto);
+    font:14px/1.6 var(--font-sans);resize:vertical}
+  textarea:focus,button:focus-visible,.perfil:focus-visible{outline:2px solid var(--acento);
+    outline-offset:2px}
+
+  .linha{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+  button{background:var(--acento);color:var(--cream);border:1px solid var(--acento);
+    border-radius:var(--raio);padding:11px 20px;font:600 14px/1.2 var(--font-sans);
+    cursor:pointer;transition:.15s}
+  button:hover:not(:disabled){background:var(--acento-2);border-color:var(--acento-2)}
+  @media (prefers-color-scheme: dark){
+    button{color:var(--navy)}
+    button:hover:not(:disabled){background:var(--acento-2);color:var(--navy)}
   }
-  .quarentena h4{margin:0 0 6px;font-size:15px;color:var(--alerta);
-    display:flex;gap:8px;align-items:center}
-  .quarentena h4 .icone{font-size:19px;line-height:1}
-  .quarentena p{margin:0 0 10px;font-size:13.5px}
-  .quarentena ul{list-style:none;padding:0;margin:0 0 10px;font-size:13px}
-  .quarentena li{background:var(--papel);border-radius:6px;padding:7px 10px;
-    margin-bottom:5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  button.secundario{background:transparent;color:var(--acento);border-color:var(--linha)}
+  button.secundario:hover:not(:disabled){background:var(--copper-veil);
+    border-color:var(--acento);color:var(--acento)}
+  button.pequeno{padding:7px 13px;font-size:12.5px}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  label.caixa{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--suave);
+    cursor:pointer}
+  .erro{color:var(--alerta);font-size:13.5px;margin:12px 0 0;min-height:1px}
+
+  /* ---- sessão e cofre -------------------------------------------------- */
+  #painel-sessao{border-color:var(--acento);background:var(--papel);
+    border-left:4px solid var(--acento)}
+  .barra{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    flex-wrap:wrap}
+  .cofre-aviso{background:var(--atencao-veu);border:1px solid var(--linha);
+    border-radius:var(--raio);padding:12px 14px;margin:14px 0 0;
+    font-size:13.5px;color:var(--texto)}
+  .cofre-aviso b{color:var(--atencao)}
+  .id-sessao{font:400 12px/1 var(--font-mono);color:var(--suave)}
+
+  /* ---- resultados ------------------------------------------------------ */
+  .doc{padding:0;overflow:hidden}
+  .doc-cabeca{padding:18px 22px;background:var(--papel-2);
+    border-bottom:1px solid var(--linha)}
+  .doc-corpo{padding:22px}
+  .selo{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--font-sans);
+    letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px;
+    border:1px solid transparent;white-space:nowrap}
+  .selo.ok{background:var(--ok-veu);color:var(--ok);border-color:var(--ok)}
+  .selo.mau{background:var(--alerta-veu);color:var(--alerta);border-color:var(--alerta)}
+  .selo.neutro{background:transparent;color:var(--suave);border-color:var(--linha)}
+  .selo.quarentena-selo{background:var(--alerta);color:#fff;border-color:var(--alerta)}
+
+  .medidor{margin-top:14px}
+  .medidor-topo{display:flex;justify-content:space-between;align-items:baseline;
+    font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--suave);margin-bottom:6px}
+  .medidor-trilho{height:6px;background:var(--linha);border-radius:999px;overflow:hidden}
+  .medidor-barra{height:100%;border-radius:999px;transition:width .4s ease}
+
+  /* verificações do auditor */
+  .verificacoes{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    margin:0 0 20px;padding:0;list-style:none}
+  .verif{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;
+    border:1px solid var(--linha);border-radius:var(--raio);background:var(--fundo)}
+  .verif .marca-v{font-size:14px;line-height:1.3;flex:none}
+  .verif.limpa .marca-v{color:var(--ok)}
+  .verif.suja .marca-v{color:var(--alerta)}
+  .verif.off .marca-v{color:var(--suave)}
+  .verif.suja{border-color:var(--alerta);background:var(--alerta-veu)}
+  .verif b{display:block;font:600 12.5px/1.3 var(--font-sans);color:var(--titulo)}
+  .verif span{font-size:12.5px;color:var(--suave)}
+
+  /* entidades */
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 6px}
+  .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--linha);
+    background:var(--fundo);border-radius:999px;padding:5px 11px;
+    font:500 11.5px/1 var(--font-mono);letter-spacing:.04em;color:var(--suave);
+    cursor:pointer;transition:.15s}
+  .chip:hover{border-color:var(--acento);color:var(--acento)}
+  .chip.on{background:var(--copper-veil);border-color:var(--acento);color:var(--acento)}
+  .chip .n{background:var(--acento);color:var(--cream);border-radius:999px;
+    padding:1px 6px;font-size:10.5px}
+  @media (prefers-color-scheme: dark){ .chip .n{color:var(--navy)} }
+  .chip.sev-alta{border-left:3px solid var(--alerta)}
+  .chip.sev-media{border-left:3px solid var(--atencao)}
+  .chip.sev-baixa{border-left:3px solid var(--suave)}
+
+  /* texto anonimizado */
+  .painel-texto{display:grid;grid-template-columns:1fr 288px;gap:18px;align-items:start}
+  @media (max-width:860px){ .painel-texto{grid-template-columns:1fr} }
+  pre.peca{margin:0;padding:18px;background:var(--fundo);border:1px solid var(--linha);
+    border-radius:var(--raio);font:13px/1.85 var(--font-mono);white-space:pre-wrap;
+    word-wrap:break-word;max-height:480px;overflow:auto;color:var(--texto)}
+  mark.tok{background:var(--copper-veil);color:var(--acento-2);border-radius:3px;
+    padding:1px 3px;font-weight:500;cursor:pointer;border-bottom:1px solid var(--acento)}
+  mark.tok:hover{background:var(--acento);color:var(--cream)}
+  @media (prefers-color-scheme: dark){
+    mark.tok{color:var(--acento)}
+    mark.tok:hover{background:var(--acento);color:var(--navy)}
+  }
+  mark.tok.foco{background:var(--acento);color:var(--cream);outline:2px solid var(--acento);
+    outline-offset:1px}
+  @media (prefers-color-scheme: dark){ mark.tok.foco{color:var(--navy)} }
+  mark.tok.apagado{background:transparent;color:var(--suave);border-bottom-color:var(--linha)}
+
+  .inspetor{background:var(--fundo);border:1px solid var(--linha);
+    border-radius:var(--raio);padding:15px;position:sticky;top:18px}
+  .inspetor .vazio{color:var(--suave);font-size:13px;margin:0}
+  .inspetor dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;
+    font-size:12.5px}
+  .inspetor dt{color:var(--suave);font:500 11px/1.5 var(--font-mono);
+    letter-spacing:.06em;text-transform:uppercase}
+  .inspetor dd{margin:0;color:var(--texto)}
+  .inspetor .tok-nome{font:500 14px/1.3 var(--font-mono);color:var(--acento);
+    margin:0 0 12px;word-break:break-all}
+
+  /* achados e quarentena */
+  .achado{border-left:3px solid var(--linha);background:var(--fundo);padding:11px 14px;
+    border-radius:0 var(--raio) var(--raio) 0;margin-bottom:9px;font-size:13.5px}
+  .achado.alta{border-left-color:var(--alerta);background:var(--alerta-veu)}
+  .achado.media{border-left-color:var(--atencao);background:var(--atencao-veu)}
+  .achado.baixa{border-left-color:var(--suave)}
+  .achado b{font:600 11px/1 var(--font-mono);letter-spacing:.1em;color:var(--titulo)}
+  .achado code{font:400 12.5px/1.5 var(--font-mono);background:var(--papel-2);
+    padding:1px 5px;border-radius:3px}
+  .sem-achado{color:var(--ok);font-size:13.5px;margin:0;display:flex;gap:8px;
+    align-items:center}
+
+  .quarentena{border:1.5px solid var(--alerta);background:var(--alerta-veu);
+    border-radius:var(--raio);padding:16px 18px;margin-bottom:20px}
+  .quarentena h4{color:var(--alerta);font-size:14px;display:flex;gap:8px;align-items:center}
+  .quarentena p{font-size:13.5px;margin:8px 0}
+  .quarentena ul{margin:10px 0;padding-left:0;list-style:none;display:grid;gap:8px}
+  .quarentena li{background:var(--papel);border:1px solid var(--linha);
+    border-radius:var(--raio);padding:10px 12px;font:13px/1.6 var(--font-mono);
     word-break:break-word}
-  .quarentena li b{font-family:inherit;color:var(--alerta)}
-  .quarentena .acao{font-size:13.5px;font-weight:600;margin:0}
-  .selo.quarentena-selo{background:var(--alerta);color:#fff}
-  .achado{border-left:3px solid var(--alerta);padding:6px 10px;margin:6px 0;
-    background:var(--alerta-claro);border-radius:0 6px 6px 0;font-size:13px}
-  .achado.media{border-color:var(--atencao);background:var(--atencao-claro)}
-  .achado.baixa{border-color:var(--suave);background:var(--fundo)}
-  .estado{font-size:13px;color:var(--suave)}
-  .barra{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-    justify-content:space-between}
-  .oculto{display:none}
+  .quarentena li b{display:block;font:600 10.5px/1.6 var(--font-mono);letter-spacing:.1em;
+    color:var(--alerta);margin-bottom:4px}
+  .quarentena .acao{font-weight:600;color:var(--alerta);margin-bottom:0}
+
+  .recomendacao{background:var(--papel-2);border-left:3px solid var(--acento);
+    padding:10px 14px;border-radius:0 var(--raio) var(--raio) 0;font-size:13.5px;
+    margin:0 0 8px}
+
+  .secao{margin-top:22px}
+  .trilha{font:400 11.5px/1.7 var(--font-mono);color:var(--suave);margin-top:18px;
+    padding-top:14px;border-top:1px solid var(--linha);word-break:break-all}
+
+  /* estados */
+  .processando{display:flex;align-items:center;gap:12px;color:var(--suave);
+    font-size:14px;padding:26px;justify-content:center}
+  .girando{width:16px;height:16px;border:2px solid var(--linha);
+    border-top-color:var(--acento);border-radius:50%;animation:girar .8s linear infinite}
+  @keyframes girar{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){
+    .girando{animation-duration:2s} .medidor-barra{transition:none}
+  }
+
+  .rodape{max-width:1180px;margin:0 auto;padding:0 24px 40px;color:var(--suave);
+    font-size:12.5px;line-height:1.7}
+  .rodape b{color:var(--titulo)}
+
+  .oculto{display:none !important}
 </style>
 </head>
 <body>
+
 <header>
-  <h1>Anonimizador de peças judiciais</h1>
-  <p>Dois agentes: um anonimiza, outro audita de forma independente. Nada sai
-     desta máquina, exceto se você ligar a camada semântica.</p>
+  <div class="cabecalho">
+    <div class="marca">
+      <!-- Ligadura AR -->
+      <svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="AR Soluções Tecnológicas">
+        <g fill="none" stroke="#F5EFE4" stroke-width="11" stroke-linecap="round"
+           stroke-linejoin="round">
+          <path d="M 12 118 L 55 12"/><path d="M 55 12 L 98 118"/>
+          <path d="M 32 76 L 78 76" stroke-width="8"/>
+          <path d="M 98 12 L 138 12 Q 165 12 165 42 Q 165 68 138 68 L 98 68"/>
+          <path d="M 130 68 L 168 118"/>
+        </g>
+        <circle cx="55" cy="12" r="7" fill="#B87333"/>
+      </svg>
+      <div class="wordmark">Inteligência artificial e<br>automação para o jurídico</div>
+    </div>
+    <div class="divisor-v"></div>
+    <div>
+      <h1 class="titulo-app">Anonimizador de peças judiciais</h1>
+      <p>Dois agentes independentes: um anonimiza, o outro audita e é o único que aprova.</p>
+    </div>
+    <div class="direita">
+      <span class="pilula" id="estado-llm"><span class="ponto"></span><span id="llm-texto">verificando…</span></span>
+      <span class="pilula" id="versao"></span>
+    </div>
+  </div>
 </header>
 
 <main>
-  <div class="cartao">
-    <h2>1. Perfil</h2>
+  <!-- 1. perfil -->
+  <section class="cartao">
+    <p class="kicker"><span class="passo">1</span> Perfil de anonimização</p>
+    <p class="legenda">O perfil ajusta os dois agentes de uma vez — o que é removido,
+      quão desconfiado fica o auditor e quantas rodadas de correção ele exige.</p>
     <div class="perfis" id="perfis"></div>
-  </div>
+  </section>
 
-  <div class="cartao">
-    <h2>2. Documentos</h2>
-    <div id="zona">
-      <b>Arraste os arquivos aqui</b> ou clique para escolher<br>
-      <span id="formatos" class="estado"></span>
+  <!-- 2. documentos -->
+  <section class="cartao">
+    <p class="kicker"><span class="passo">2</span> Documentos</p>
+    <p class="legenda">Os arquivos são processados nesta máquina. Nada é gravado em disco
+      e nada sai para a rede enquanto a camada semântica estiver desligada.</p>
+
+    <div id="zona" tabindex="0" role="button">
+      <b>Arraste as peças aqui ou clique para escolher</b>
+      Vários arquivos no mesmo envio compartilham o cofre — a mesma pessoa
+      recebe o mesmo pseudônimo em todos eles.
+      <span class="formatos" id="formatos"></span>
     </div>
     <input type="file" id="arquivo" multiple class="oculto">
     <ul class="arquivos" id="lista"></ul>
-    <div style="margin-top:14px">
-      <textarea id="texto" placeholder="…ou cole o texto da peça aqui."></textarea>
-    </div>
+
+    <div class="ou">ou</div>
+    <textarea id="texto" placeholder="Cole aqui o texto da peça."></textarea>
+
     <div class="linha">
       <button id="anonimizar">Anonimizar e auditar</button>
-      <button id="auditar" class="secundario">Só auditar (texto já anonimizado)</button>
-      <label class="caixa"><input type="checkbox" id="llm"> camada semântica (Claude)</label>
-      <span id="estado-llm" class="estado"></span>
+      <button id="auditar" class="secundario">Só auditar</button>
+      <label class="caixa">
+        <input type="checkbox" id="llm"> camada semântica (Claude)
+      </label>
     </div>
-    <p class="aviso" id="erro" style="color:var(--alerta)"></p>
-  </div>
+    <p class="erro" id="erro"></p>
+  </section>
 
-  <div class="cartao oculto" id="painel-sessao">
+  <!-- sessão -->
+  <section class="cartao oculto" id="painel-sessao">
     <div class="barra">
       <div>
-        <h2 style="margin:0">Sessão</h2>
-        <span class="estado" id="resumo-sessao"></span>
+        <p class="kicker" style="margin-bottom:6px">Cofre da sessão</p>
+        <span class="id-sessao" id="resumo-sessao"></span>
       </div>
       <div class="linha" style="margin:0">
-        <button class="secundario" id="baixar-cofre">Baixar cofre</button>
-        <button class="secundario" id="reidentificar">Reidentificar</button>
-        <button class="secundario" id="encerrar">Encerrar e apagar cofre</button>
+        <button class="secundario pequeno" id="baixar-cofre">Baixar cofre</button>
+        <button class="secundario pequeno" id="reidentificar">Reidentificar</button>
+        <button class="secundario pequeno" id="encerrar">Encerrar e apagar</button>
       </div>
     </div>
-    <p class="aviso">O cofre é o mapa de volta aos dados reais. Ele vive apenas
-      na memória deste servidor: encerrar a sessão torna os textos anonimizados
-      irreversíveis. Se for guardar, guarde longe da peça e com acesso
-      registrado.</p>
-  </div>
+    <p class="cofre-aviso">
+      <b>O cofre é o mapa de volta aos dados reais.</b> Ele existe só na memória
+      deste servidor e desaparece quando você encerra a sessão ou fecha o processo.
+      Se baixar, guarde-o <b>separado</b> das peças anonimizadas: quem tiver os dois
+      juntos desfaz a anonimização inteira.
+    </p>
+  </section>
 
   <div id="resultados"></div>
 </main>
 
+<footer class="rodape">
+  <b>A AR é uma empresa de tecnologia e não presta serviços jurídicos ou de advocacia.</b>
+  Atuamos exclusivamente com tecnologia, dados e capacitação.
+  A anonimização automática não substitui a revisão de quem responde pela peça.
+</footer>
+
 <script>
 const $ = s => document.querySelector(s);
-let perfilAtivo = "padrao", arquivos = [], sessao = null;
+let perfilAtivo = "padrao", arquivos = [], sessao = null, ultimos = null;
 
 async function api(rota, corpo){
   const r = await fetch(rota, corpo ? {
@@ -161,11 +406,10 @@ async function api(rota, corpo){
 }
 
 function escapar(t){
-  return t.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  return String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 }
-function destacar(t){
-  return escapar(t).replace(/\[[A-Z_]+_[0-9a-f]+[a-z]?\]/g, m => `<mark>${m}</mark>`);
-}
+const RE_TOKEN = /\[[A-Z_]+_[0-9a-f]+[a-z]?\]/g;
+
 function baixar(nome, conteudo, tipo){
   const url = URL.createObjectURL(new Blob([conteudo], {type: tipo}));
   const a = Object.assign(document.createElement("a"), {href:url, download:nome});
@@ -174,29 +418,42 @@ function baixar(nome, conteudo, tipo){
 
 // ---- estado inicial -------------------------------------------------------
 api("/api/estado").then(estado => {
-  $("#formatos").textContent = "formatos aceitos: " + estado.formatos.join(", ");
+  $("#versao").textContent = "v" + estado.versao;
+  $("#formatos").textContent = "aceita " + estado.formatos.join("  ·  ");
   $("#perfis").innerHTML = estado.perfis.map(p => `
-    <div class="perfil ${p.chave===perfilAtivo?"ativo":""}" data-chave="${p.chave}">
-      <b>${p.nome}</b><span>${p.descricao}<br><i>${p.quando_usar}</i>
-      ${p.tipos_preservados.length ? "<br>preserva: " + p.tipos_preservados.join(", ") : ""}
-      </span></div>`).join("");
-  document.querySelectorAll(".perfil").forEach(el => el.onclick = () => {
-    perfilAtivo = el.dataset.chave;
-    document.querySelectorAll(".perfil").forEach(o => o.classList.remove("ativo"));
-    el.classList.add("ativo");
+    <div class="perfil ${p.chave===perfilAtivo?"ativo":""}" data-chave="${p.chave}"
+         tabindex="0" role="button">
+      <b>${escapar(p.nome)}</b>
+      <span>${escapar(p.descricao)}<br><i>${escapar(p.quando_usar)}</i></span>
+      ${p.tipos_preservados.length
+        ? `<div class="preserva">preserva: ${p.tipos_preservados.join(", ")}</div>` : ""}
+    </div>`).join("");
+  document.querySelectorAll(".perfil").forEach(el => {
+    const escolher = () => {
+      perfilAtivo = el.dataset.chave;
+      document.querySelectorAll(".perfil").forEach(o => o.classList.remove("ativo"));
+      el.classList.add("ativo");
+    };
+    el.onclick = escolher;
+    el.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); escolher(); } };
   });
+
+  const pil = $("#estado-llm");
   if(estado.llm.disponivel){
-    $("#estado-llm").textContent = "Claude disponível";
+    pil.classList.add("viva");
+    $("#llm-texto").textContent = "Claude disponível";
     $("#llm").checked = estado.llm.padrao;
   } else {
     $("#llm").disabled = true;
-    $("#estado-llm").textContent = "indisponível: " + estado.llm.motivo;
+    $("#llm-texto").textContent = "só determinístico";
+    pil.title = estado.llm.motivo || "";
   }
-});
+}).catch(e => { $("#erro").textContent = e.message; });
 
 // ---- arquivos -------------------------------------------------------------
 const zona = $("#zona");
 zona.onclick = () => $("#arquivo").click();
+zona.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); $("#arquivo").click(); } };
 zona.ondragover = e => { e.preventDefault(); zona.classList.add("sobre"); };
 zona.ondragleave = () => zona.classList.remove("sobre");
 zona.ondrop = e => {
@@ -205,14 +462,13 @@ zona.ondrop = e => {
 };
 $("#arquivo").onchange = e => receber([...e.target.files]);
 
-function receber(lista){
-  lista.forEach(f => arquivos.push(f));
-  desenharArquivos();
-}
+function receber(lista){ lista.forEach(f => arquivos.push(f)); desenharArquivos(); }
+
 function desenharArquivos(){
   $("#lista").innerHTML = arquivos.map((f,i) =>
-    `<li><span>${escapar(f.name)} <span class="estado">(${(f.size/1024).toFixed(0)} kB)</span></span>
-     <button data-i="${i}" title="remover">×</button></li>`).join("");
+    `<li><span>${escapar(f.name)} <span class="peso">${(f.size/1024).toFixed(0)} kB</span></span>
+     <button data-i="${i}" title="remover" aria-label="remover ${escapar(f.name)}">&times;</button></li>`
+  ).join("");
   document.querySelectorAll("#lista button").forEach(b => b.onclick = () => {
     arquivos.splice(+b.dataset.i, 1); desenharArquivos();
   });
@@ -230,26 +486,28 @@ function lerBase64(arquivo){
 async function enviar(rota){
   $("#erro").textContent = "";
   const texto = $("#texto").value.trim();
-  if(!arquivos.length && !texto){ $("#erro").textContent = "Envie um arquivo ou cole um texto."; return; }
-
+  if(!arquivos.length && !texto){
+    $("#erro").textContent = "Envie um arquivo ou cole um texto."; return;
+  }
   const botoes = document.querySelectorAll("#anonimizar,#auditar");
   botoes.forEach(b => b.disabled = true);
-  $("#resultados").innerHTML = `<div class="cartao estado">processando…</div>`;
+  const quantos = arquivos.length + (texto ? 1 : 0);
+  $("#resultados").innerHTML =
+    `<div class="cartao"><div class="processando"><span class="girando"></span>
+     analisando ${quantos} documento(s) — detecção determinística, auditoria e correção</div></div>`;
   try{
-    const corpo = {
-      perfil: perfilAtivo, usar_llm: $("#llm").checked, sessao,
-      texto, arquivos: []
-    };
+    const corpo = {perfil:perfilAtivo, usar_llm:$("#llm").checked, sessao, texto, arquivos:[]};
     for(const f of arquivos){
-      corpo.arquivos.push({nome: f.name, conteudo: await lerBase64(f)});
+      corpo.arquivos.push({nome:f.name, conteudo: await lerBase64(f)});
     }
     const dados = await api(rota, corpo);
     if(dados.sessao){
       sessao = dados.sessao;
       $("#painel-sessao").classList.remove("oculto");
       $("#resumo-sessao").textContent =
-        `${dados.sessao} — ${dados.itens_no_cofre} entrada(s) no cofre`;
+        `${dados.sessao} · ${dados.itens_no_cofre} entrada(s)`;
     }
+    ultimos = dados;
     desenhar(dados, rota === "/api/anonimizar");
   }catch(e){
     $("#resultados").innerHTML = "";
@@ -262,60 +520,148 @@ $("#anonimizar").onclick = () => enviar("/api/anonimizar");
 $("#auditar").onclick = () => enviar("/api/auditar");
 
 // ---- resultados -----------------------------------------------------------
+const ROTULOS = {
+  residual:  ["Dado residual", "procura dado pessoal que sobrou no texto entregue"],
+  confronto: ["Confronto com o original", "compara com a peça de entrada"],
+  integridade:["Integridade do texto", "garante que a peça não foi reescrita"],
+  injecao:   ["Injeção de prompt", "varre instruções dirigidas a sistemas de IA"],
+  cofre:     ["Cofre", "confere se algum valor real vazou para o cofre"],
+  semantica: ["Camada semântica", "leitura por modelo de linguagem"],
+};
+
+function corDoRisco(n){
+  if(n === 0) return "var(--ok)";
+  if(n <= 25) return "var(--atencao)";
+  return "var(--alerta)";
+}
+
+function verificacoes(parecer){
+  const v = parecer.verificacoes || {};
+  return Object.entries(v).map(([k, valor]) => {
+    const [nome, explica] = ROTULOS[k] || [k, ""];
+    let classe = "limpa", marca = "✓";
+    if(/desativada|não executada|nao executada/i.test(valor)){ classe = "off"; marca = "—"; }
+    else if(!/^0 /.test(valor)){ classe = "suja"; marca = "!"; }
+    return `<li class="verif ${classe}">
+      <span class="marca-v">${marca}</span>
+      <span><b>${escapar(nome)}</b><span>${escapar(valor)}${explica ? " · " + explica : ""}</span></span>
+    </li>`;
+  }).join("");
+}
+
+function chipsDeTipo(anon){
+  if(!anon || !anon.total_por_tipo) return "";
+  const sev = {};
+  (anon.ocorrencias || []).forEach(o => { sev[o.tipo] = o.severidade || "baixa"; });
+  return Object.entries(anon.total_por_tipo)
+    .sort((a,b) => b[1] - a[1])
+    .map(([t,n]) => `<button class="chip sev-${sev[t]||"baixa"}" data-tipo="${t}">
+        ${t}<span class="n">${n}</span></button>`).join("");
+}
+
+function textoComTokens(txt){
+  return escapar(txt).replace(RE_TOKEN, m =>
+    `<mark class="tok" data-tok="${m}" data-tipo="${m.slice(1, m.lastIndexOf("_"))}"
+       tabindex="0" role="button">${m}</mark>`);
+}
+
 function desenhar(dados, comTexto){
   $("#resultados").innerHTML = dados.documentos.map((d, i) => {
-    if(d.erro) return `<div class="cartao doc"><h3>${escapar(d.nome)}
-      <span class="selo mau">falhou</span></h3><p class="estado">${escapar(d.erro)}</p></div>`;
+    if(d.erro) return `<section class="cartao doc">
+      <div class="doc-cabeca"><div class="barra">
+        <h3>${escapar(d.nome)}</h3><span class="selo mau">falhou</span></div></div>
+      <div class="doc-corpo"><p class="legenda" style="margin:0">${escapar(d.erro)}</p></div>
+    </section>`;
 
     const parecer = d.relatorio.parecer;
     const anon = d.relatorio.anonimizacao;
-    const selo = d.aprovado ? `<span class="selo ok">aprovado</span>`
-                            : `<span class="selo mau">reprovado</span>`;
     const alertas = parecer.alertas_de_seguranca || [];
+    const selo = d.aprovado ? `<span class="selo ok">aprovado pelo auditor</span>`
+                            : `<span class="selo mau">reprovado</span>`;
+
     const quarentena = alertas.length ? `
       <div class="quarentena">
-        <h4><span class="icone">⚠</span> Quarentena — tentativa de injeção de prompt</h4>
-        <p>Este documento contém ${alertas.length} trecho(s) com forma de
-           instrução dirigida a sistemas de IA. Eles foram tratados como dado,
-           nunca como comando, e os dados pessoais foram removidos
-           normalmente.</p>
-        <ul>${alertas.map(a => `<li><b>${a.gravidade.toUpperCase()} · ${a.tipo}</b><br>
-             ${escapar(a.trecho || a.descricao)}</li>`).join("")}</ul>
-        <p class="acao">Não encaminhe este arquivo a outro sistema de IA
-           (resumidor, buscador, assistente de minuta) antes de alguém ler os
-           trechos acima.</p>
+        <h4>⚠ Quarentena — tentativa de injeção de prompt</h4>
+        <p>Este documento contém ${alertas.length} trecho(s) com forma de instrução
+           dirigida a sistemas de IA. Foram tratados como dado, nunca como comando,
+           e a anonimização seguiu normalmente.</p>
+        <ul>${alertas.map(a => `<li><b>${escapar(a.gravidade || "")} · ${escapar(a.tipo || "")}</b>
+             ${escapar(a.trecho || a.descricao || "")}</li>`).join("")}</ul>
+        <p class="acao">Não encaminhe este arquivo a outro sistema de IA antes que
+           alguém leia os trechos acima.</p>
       </div>` : "";
-    const tipos = anon ? Object.entries(anon.total_por_tipo)
-      .map(([t,n]) => `<tr><td>${t}</td><td>${n}</td></tr>`).join("") : "";
-    const achados = parecer.achados.map(a =>
-      `<div class="achado ${a.gravidade}"><b>${a.gravidade.toUpperCase()}</b>
-       · ${a.categoria} · ${a.tipo} ${a.trecho ? "· <code>"+escapar(a.trecho)+"</code>" : ""}
-       <br>${escapar(a.descricao)}</div>`).join("") || `<p class="estado">nenhum achado</p>`;
-    const verificacoes = Object.entries(parecer.verificacoes || {})
-      .map(([k,v]) => `<tr><td>${k}</td><td>${escapar(v)}</td></tr>`).join("");
 
-    return `<div class="cartao doc">
-      <div class="barra">
-        <h3>${escapar(d.nome)} ${selo}
-          <span class="selo neutro">risco ${d.nota_risco}/100</span>
-          ${alertas.length ? `<span class="selo quarentena-selo">quarentena</span>` : ""}</h3>
-        ${comTexto ? `<div class="linha" style="margin:0">
-          <button class="secundario" data-baixar="${i}">Baixar .txt</button>
-          <button class="secundario" data-relatorio="${i}">Baixar relatório</button>
-        </div>` : ""}
+    const achados = parecer.achados.length
+      ? parecer.achados.map(a => `<div class="achado ${a.gravidade}">
+          <b>${escapar((a.gravidade||"").toUpperCase())} · ${escapar(a.categoria||"")} · ${escapar(a.tipo||"")}</b>
+          ${a.trecho ? ` <code>${escapar(a.trecho)}</code>` : ""}
+          <br>${escapar(a.descricao||"")}</div>`).join("")
+      : `<p class="sem-achado">✓ O auditor redetectou do zero e não encontrou dado pessoal remanescente.</p>`;
+
+    const painel = comTexto ? `
+      <div class="secao">
+        <p class="kicker">Peça anonimizada</p>
+        <div class="chips" data-chips="${i}">${chipsDeTipo(anon)}</div>
+        <p class="legenda">Clique num marcador do texto para ver por que aquele trecho
+          foi substituído, ou num tipo acima para isolá-lo.</p>
+        <div class="painel-texto">
+          <pre class="peca" data-peca="${i}">${textoComTokens(d.texto_anonimizado)}</pre>
+          <aside class="inspetor" data-inspetor="${i}">
+            <p class="vazio">Nenhum marcador selecionado.</p>
+          </aside>
+        </div>
+      </div>` : "";
+
+    const t = d.relatorio.trilha;
+    const trilha = t ? `<div class="trilha">
+      trilha · ${escapar(t.momento_utc)} · ${d.rodadas || 1} rodada(s) ·
+      ${escapar(t.duracao_segundos)}s · original ${escapar(String(t.hash_documento_original).slice(0,16))}…
+      → anonimizado ${escapar(String(t.hash_documento_anonimizado).slice(0,16))}…</div>` : "";
+
+    return `<section class="cartao doc">
+      <div class="doc-cabeca">
+        <div class="barra">
+          <div>
+            <h3>${escapar(d.nome)}</h3>
+            <div class="linha" style="margin-top:8px;gap:8px">
+              ${selo}
+              ${alertas.length ? `<span class="selo quarentena-selo">quarentena</span>` : ""}
+              ${anon ? `<span class="selo neutro">${anon.total_ocorrencias} substituição(ões)</span>` : ""}
+            </div>
+          </div>
+          ${comTexto ? `<div class="linha" style="margin:0">
+            <button class="secundario pequeno" data-baixar="${i}">Baixar .txt</button>
+            <button class="secundario pequeno" data-relatorio="${i}">Relatório .json</button>
+          </div>` : ""}
+        </div>
+        <div class="medidor">
+          <div class="medidor-topo"><span>nota de risco residual</span>
+            <span>${d.nota_risco}/100</span></div>
+          <div class="medidor-trilho">
+            <div class="medidor-barra" style="width:${Math.max(d.nota_risco,2)}%;
+                 background:${corDoRisco(d.nota_risco)}"></div>
+          </div>
+        </div>
       </div>
-      ${quarentena}
-      ${comTexto ? `<pre id="texto-${i}">${destacar(d.texto_anonimizado)}</pre>` : ""}
-      <table>
-        <tr><th>verificação</th><th>resultado</th></tr>${verificacoes}
-      </table>
-      ${tipos ? `<table><tr><th>entidade</th><th>ocorrências</th></tr>${tipos}</table>` : ""}
-      <h2 style="margin-top:16px">Achados do auditor</h2>
-      ${achados}
-      ${(parecer.recomendacoes||[]).map(r => `<p class="aviso">▸ ${escapar(r)}</p>`).join("")}
-    </div>`;
+      <div class="doc-corpo">
+        ${quarentena}
+        <p class="kicker">Verificações do auditor</p>
+        <ul class="verificacoes">${verificacoes(parecer)}</ul>
+        ${painel}
+        <div class="secao">
+          <p class="kicker">Achados</p>
+          ${achados}
+        </div>
+        ${(parecer.recomendacoes||[]).length ? `<div class="secao">
+          <p class="kicker">Recomendações</p>
+          ${parecer.recomendacoes.map(r => `<p class="recomendacao">${escapar(r)}</p>`).join("")}
+        </div>` : ""}
+        ${trilha}
+      </div>
+    </section>`;
   }).join("");
 
+  // --- interações pós-render ---
   document.querySelectorAll("[data-baixar]").forEach(b => b.onclick = () => {
     const d = dados.documentos[+b.dataset.baixar];
     baixar(d.nome.replace(/\.[^.]+$/,"") + "_anonimizado.txt",
@@ -326,6 +672,52 @@ function desenhar(dados, comTexto){
     baixar(d.nome.replace(/\.[^.]+$/,"") + "_relatorio.json",
            JSON.stringify(d.relatorio, null, 2), "application/json");
   });
+
+  dados.documentos.forEach((d, i) => {
+    const peca = document.querySelector(`[data-peca="${i}"]`);
+    if(!peca) return;
+    const inspetor = document.querySelector(`[data-inspetor="${i}"]`);
+    const anon = d.relatorio.anonimizacao || {};
+    const ocorrencias = anon.ocorrencias || [];
+
+    const inspecionar = el => {
+      const tok = el.dataset.tok, tipo = el.dataset.tipo;
+      peca.querySelectorAll("mark.tok").forEach(m =>
+        m.classList.toggle("foco", m.dataset.tok === tok));
+      const doTipo = ocorrencias.filter(o => o.tipo === tipo);
+      const vezes = peca.querySelectorAll(`mark.tok[data-tok="${CSS.escape(tok)}"]`).length;
+      const conf = doTipo.map(o => o.confianca).filter(n => typeof n === "number");
+      const motivos = [...new Set(doTipo.map(o => o.motivo).filter(Boolean))];
+      const origens = [...new Set(doTipo.map(o => o.origem).filter(Boolean))];
+      inspetor.innerHTML = `
+        <p class="tok-nome">${escapar(tok)}</p>
+        <dl>
+          <dt>tipo</dt><dd>${escapar(tipo)}</dd>
+          <dt>no texto</dt><dd>${vezes} ocorrência(s) deste marcador</dd>
+          <dt>severidade</dt><dd>${escapar(doTipo[0]?.severidade || "—")}</dd>
+          <dt>confiança</dt><dd>${conf.length
+            ? (Math.min(...conf).toFixed(2) + " a " + Math.max(...conf).toFixed(2)) : "—"}</dd>
+          <dt>origem</dt><dd>${escapar(origens.join(", ") || "—")}</dd>
+          <dt>motivo</dt><dd>${escapar(motivos.join(" · ") || "—")}</dd>
+        </dl>
+        <p class="legenda" style="margin:12px 0 0;font-size:12px">
+          O valor real não aparece aqui por desenho: o relatório não repete o dado
+          que denuncia.</p>`;
+    };
+
+    peca.querySelectorAll("mark.tok").forEach(m => {
+      m.onclick = () => inspecionar(m);
+      m.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); inspecionar(m); } };
+    });
+
+    const chips = document.querySelector(`[data-chips="${i}"]`);
+    if(chips) chips.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+      const ligado = c.classList.toggle("on");
+      chips.querySelectorAll(".chip").forEach(o => { if(o !== c) o.classList.remove("on"); });
+      peca.querySelectorAll("mark.tok").forEach(m =>
+        m.classList.toggle("apagado", ligado && m.dataset.tipo !== c.dataset.tipo));
+    });
+  });
 }
 
 // ---- sessão ---------------------------------------------------------------
@@ -335,16 +727,20 @@ $("#baixar-cofre").onclick = () =>
 $("#reidentificar").onclick = async () => {
   const texto = prompt("Cole o texto anonimizado para reidentificar:");
   if(!texto) return;
-  const dados = await api("/api/reidentificar", {sessao, texto});
-  baixar("reidentificado.txt", dados.texto, "text/plain");
-  alert(dados.aviso);
+  try{
+    const dados = await api("/api/reidentificar", {sessao, texto});
+    baixar("reidentificado.txt", dados.texto, "text/plain");
+    alert(dados.aviso);
+  }catch(e){ alert(e.message); }
 };
 
 $("#encerrar").onclick = async () => {
   if(!confirm("Apagar o cofre desta sessão? Os textos já anonimizados ficam irreversíveis.")) return;
-  await api("/api/encerrar", {sessao});
-  sessao = null;
-  $("#painel-sessao").classList.add("oculto");
+  try{
+    await api("/api/encerrar", {sessao});
+    sessao = null;
+    $("#painel-sessao").classList.add("oculto");
+  }catch(e){ alert(e.message); }
 };
 </script>
 </body>
