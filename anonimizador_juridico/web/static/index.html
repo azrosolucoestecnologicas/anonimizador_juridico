@@ -45,35 +45,47 @@
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--fundo);color:var(--texto);
-    font:16px/1.6 var(--font-sans);
-    -webkit-font-smoothing:antialiased}
+    font:16px/1.6 var(--font-sans);-webkit-font-smoothing:antialiased}
 
   /* ---- cabeçalho ------------------------------------------------------ */
-  header{background:var(--navy);color:var(--cream);
-    border-bottom:3px solid var(--copper)}
-  .cabecalho{max-width:1180px;margin:0 auto;padding:20px 24px;
+  header{background:var(--navy);color:var(--cream)}
+  .cabecalho{max-width:1180px;margin:0 auto;padding:18px 24px;
     display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-  .marca{display:flex;align-items:center;gap:14px;min-width:0}
-  .marca svg{width:44px;height:auto;flex:none;display:block}
-  .wordmark{font:500 10px/1.35 var(--font-mono);letter-spacing:.18em;
+  .marca{display:flex;align-items:center;gap:13px;min-width:0}
+  .marca svg{width:40px;height:auto;flex:none;display:block}
+  .wordmark{font:500 9.5px/1.35 var(--font-mono);letter-spacing:.17em;
     text-transform:uppercase;color:var(--copper-soft);white-space:nowrap}
-  .titulo-app{margin:0;font:400 23px/1.2 var(--font-display);
+  .titulo-app{margin:0;font:400 21px/1.2 var(--font-display);
     letter-spacing:-.02em;color:var(--cream)}
-  .titulo-app + p{margin:3px 0 0;font-size:13.5px;color:rgba(245,239,228,.68)}
-  .divisor-v{width:1px;align-self:stretch;background:rgba(245,239,228,.18);margin:0 4px}
-  .cabecalho .direita{margin-left:auto;display:flex;align-items:center;
-    gap:10px;flex-wrap:wrap}
+  .titulo-app + p{margin:2px 0 0;font-size:13px;color:rgba(245,239,228,.66)}
+  .divisor-v{width:1px;align-self:stretch;background:rgba(245,239,228,.18);margin:0 3px}
+  .cabecalho .direita{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 
   .pilula{display:inline-flex;align-items:center;gap:6px;
-    font:500 11.5px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+    font:500 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
     padding:6px 10px;border-radius:999px;border:1px solid rgba(245,239,228,.28);
     color:rgba(245,239,228,.82);white-space:nowrap}
   .pilula.viva{border-color:var(--copper-soft);color:var(--copper-soft);
     background:rgba(184,115,51,.14)}
   .ponto{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 
+  /* ---- navegação ------------------------------------------------------ */
+  nav{background:var(--navy);border-bottom:3px solid var(--copper);
+    position:sticky;top:0;z-index:20}
+  .abas{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;gap:2px;
+    overflow-x:auto;scrollbar-width:none}
+  .abas::-webkit-scrollbar{display:none}
+  .aba{background:none;border:0;border-bottom:3px solid transparent;
+    margin-bottom:-3px;color:rgba(245,239,228,.62);cursor:pointer;
+    padding:13px 16px;font:600 13.5px/1.2 var(--font-sans);white-space:nowrap;
+    display:flex;align-items:center;gap:8px;transition:.15s;border-radius:0}
+  .aba:hover{color:var(--cream)}
+  .aba[aria-selected="true"]{color:var(--copper-soft);border-bottom-color:var(--copper-soft)}
+  .aba .num{font:500 10px/1 var(--font-mono);opacity:.7}
+
   /* ---- estrutura ------------------------------------------------------ */
-  main{max-width:1180px;margin:0 auto;padding:30px 24px 96px}
+  main{max-width:1180px;margin:0 auto;padding:28px 24px 96px}
+  .painel[hidden]{display:none}
   .kicker{font:500 11px/1 var(--font-mono);letter-spacing:.2em;text-transform:uppercase;
     color:var(--acento);margin:0 0 10px;display:flex;align-items:center;gap:10px}
   .kicker::after{content:"";height:1px;flex:1;background:var(--linha)}
@@ -84,18 +96,84 @@
 
   .cartao{background:var(--papel);border:1px solid var(--linha);
     border-radius:var(--raio-g);padding:22px;margin-bottom:20px}
-  h2{font:400 19px/1.3 var(--font-display);letter-spacing:-.01em;
-    color:var(--titulo);margin:0 0 4px}
+  h2{font:400 21px/1.3 var(--font-display);letter-spacing:-.01em;
+    color:var(--titulo);margin:0 0 6px}
   h3{font:400 18px/1.3 var(--font-display);letter-spacing:-.01em;
     color:var(--titulo);margin:0}
   h4{font:600 13px/1.4 var(--font-sans);color:var(--titulo);margin:0 0 6px}
   .legenda{color:var(--suave);font-size:13.5px;margin:0 0 16px}
+  p.corpo{font-size:14.5px;margin:0 0 12px}
+  p.corpo:last-child{margin-bottom:0}
+  strong{color:var(--titulo);font-weight:600}
+
+  /* ---- página inicial -------------------------------------------------- */
+  .capa{background:var(--navy);color:var(--cream);border-radius:var(--raio-g);
+    padding:36px 34px;margin-bottom:22px;position:relative;overflow:hidden}
+  .capa::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 320px at 88% -10%,rgba(184,115,51,.26),transparent 70%);
+    pointer-events:none}
+  .capa > *{position:relative}
+  .capa .kicker{color:var(--copper-soft)}
+  .capa .kicker::after{background:rgba(245,239,228,.2)}
+  .capa h2{color:var(--cream);font-size:31px;line-height:1.18;max-width:20ch;
+    margin-bottom:14px}
+  .capa .destaque{color:var(--copper-soft);font-style:italic;font-weight:300}
+  .capa p{color:rgba(245,239,228,.82);font-size:15.5px;max-width:62ch;margin:0 0 12px}
+  .capa p:last-child{margin-bottom:0}
+  .capa b{color:var(--cream)}
+
+  .fluxo{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    margin:24px 0 0}
+  .etapa{background:rgba(245,239,228,.07);border:1px solid rgba(245,239,228,.16);
+    border-radius:var(--raio);padding:14px 16px}
+  .etapa .n{font:500 10px/1 var(--font-mono);letter-spacing:.16em;
+    color:var(--copper-soft);display:block;margin-bottom:7px}
+  .etapa b{display:block;font:600 14px/1.35 var(--font-sans);color:var(--cream);
+    margin-bottom:5px}
+  .etapa span{font-size:12.5px;color:rgba(245,239,228,.68);line-height:1.5}
+
+  .duas{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+
+  table.comparativo{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 0}
+  table.comparativo th,table.comparativo td{text-align:left;padding:9px 12px;
+    border-bottom:1px solid var(--linha);vertical-align:top}
+  table.comparativo th{font:500 10.5px/1.4 var(--font-mono);letter-spacing:.1em;
+    text-transform:uppercase;color:var(--suave)}
+  table.comparativo td:first-child{color:var(--suave);width:30%}
+  table.comparativo tr:last-child td{border-bottom:0}
+
+  .ferramentas{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+  .ferramenta{border:1px solid var(--linha);border-radius:var(--raio);padding:16px;
+    background:var(--fundo);text-align:left;cursor:pointer;transition:.15s;font:inherit;
+    color:inherit;display:block;width:100%}
+  .ferramenta:hover{border-color:var(--acento);background:var(--copper-veil)}
+  .ferramenta b{display:block;font:600 15px/1.3 var(--font-sans);color:var(--titulo);
+    margin-bottom:6px}
+  .ferramenta span{font-size:13px;color:var(--suave);display:block;line-height:1.55}
+  .ferramenta .abrir{display:inline-block;margin-top:10px;font:500 11px/1 var(--font-mono);
+    letter-spacing:.12em;text-transform:uppercase;color:var(--acento)}
+
+  ul.lista{margin:0;padding-left:0;list-style:none;display:grid;gap:9px}
+  ul.lista li{font-size:14px;padding-left:22px;position:relative;line-height:1.55}
+  ul.lista li::before{content:"▸";position:absolute;left:0;color:var(--acento)}
+
+  .tipos{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .tipo{font:500 11px/1 var(--font-mono);letter-spacing:.04em;color:var(--suave);
+    border:1px solid var(--linha);border-radius:999px;padding:5px 10px;background:var(--fundo)}
+  .tipo.verificado{border-color:var(--ok);color:var(--ok);background:var(--ok-veu);
+    font-weight:600}
+  .tipo.verificado::before{content:"✓ ";opacity:.8}
+
+  .nota{background:var(--atencao-veu);border-left:3px solid var(--atencao);
+    border-radius:0 var(--raio) var(--raio) 0;padding:13px 16px;font-size:13.5px;
+    margin:16px 0 0}
+  .nota b{color:var(--atencao)}
 
   /* ---- perfis --------------------------------------------------------- */
   .perfis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr))}
   .perfil{border:1px solid var(--linha);border-radius:var(--raio);padding:14px 16px;
     cursor:pointer;background:var(--fundo);transition:border-color .15s,background .15s;
-    position:relative}
+    text-align:left;font:inherit;color:inherit;width:100%}
   .perfil:hover{border-color:var(--acento)}
   .perfil.ativo{border-color:var(--acento);background:var(--copper-veil);
     box-shadow:inset 3px 0 0 var(--acento)}
@@ -106,15 +184,15 @@
   .perfil .preserva{margin-top:7px;font:500 11px/1.4 var(--font-mono);
     letter-spacing:.04em;color:var(--suave)}
 
-  /* ---- entrada -------------------------------------------------------- */
-  #zona{border:1.5px dashed var(--linha);border-radius:var(--raio);padding:30px 20px;
+  /* ---- entrada de documentos ------------------------------------------ */
+  .zona{border:1.5px dashed var(--linha);border-radius:var(--raio);padding:28px 20px;
     text-align:center;cursor:pointer;color:var(--suave);background:var(--fundo);
     transition:.15s}
-  #zona:hover{border-color:var(--acento);color:var(--acento)}
-  #zona.sobre{border-color:var(--acento);background:var(--copper-veil);color:var(--acento)}
-  #zona b{display:block;font:600 15px/1.4 var(--font-sans);color:var(--titulo);
+  .zona:hover{border-color:var(--acento);color:var(--acento)}
+  .zona.sobre{border-color:var(--acento);background:var(--copper-veil);color:var(--acento)}
+  .zona b{display:block;font:600 15px/1.4 var(--font-sans);color:var(--titulo);
     margin-bottom:4px}
-  #zona.sobre b{color:var(--acento)}
+  .zona.sobre b{color:var(--acento)}
   .formatos{font:500 11px/1.4 var(--font-mono);letter-spacing:.06em;
     color:var(--suave);margin-top:8px;display:block}
 
@@ -135,8 +213,9 @@
   textarea{width:100%;min-height:128px;padding:13px 14px;border:1px solid var(--linha);
     border-radius:var(--raio);background:var(--fundo);color:var(--texto);
     font:14px/1.6 var(--font-sans);resize:vertical}
-  textarea:focus,button:focus-visible,.perfil:focus-visible{outline:2px solid var(--acento);
-    outline-offset:2px}
+  textarea.mono{font:13px/1.7 var(--font-mono)}
+  textarea:focus,button:focus-visible,.perfil:focus-visible,.zona:focus-visible{
+    outline:2px solid var(--acento);outline-offset:2px}
 
   .linha{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
   button{background:var(--acento);color:var(--cream);border:1px solid var(--acento);
@@ -157,20 +236,17 @@
   .erro{color:var(--alerta);font-size:13.5px;margin:12px 0 0;min-height:1px}
 
   /* ---- sessão e cofre -------------------------------------------------- */
-  #painel-sessao{border-color:var(--acento);background:var(--papel);
-    border-left:4px solid var(--acento)}
+  #painel-sessao{border-color:var(--acento);border-left:4px solid var(--acento)}
   .barra{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
     flex-wrap:wrap}
   .cofre-aviso{background:var(--atencao-veu);border:1px solid var(--linha);
-    border-radius:var(--raio);padding:12px 14px;margin:14px 0 0;
-    font-size:13.5px;color:var(--texto)}
+    border-radius:var(--raio);padding:12px 14px;margin:14px 0 0;font-size:13.5px}
   .cofre-aviso b{color:var(--atencao)}
   .id-sessao{font:400 12px/1 var(--font-mono);color:var(--suave)}
 
   /* ---- resultados ------------------------------------------------------ */
   .doc{padding:0;overflow:hidden}
-  .doc-cabeca{padding:18px 22px;background:var(--papel-2);
-    border-bottom:1px solid var(--linha)}
+  .doc-cabeca{padding:18px 22px;background:var(--papel-2);border-bottom:1px solid var(--linha)}
   .doc-corpo{padding:22px}
   .selo{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--font-sans);
     letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px;
@@ -187,7 +263,6 @@
   .medidor-trilho{height:6px;background:var(--linha);border-radius:999px;overflow:hidden}
   .medidor-barra{height:100%;border-radius:999px;transition:width .4s ease}
 
-  /* verificações do auditor */
   .verificacoes{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
     margin:0 0 20px;padding:0;list-style:none}
   .verif{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;
@@ -200,7 +275,6 @@
   .verif b{display:block;font:600 12.5px/1.3 var(--font-sans);color:var(--titulo)}
   .verif span{font-size:12.5px;color:var(--suave)}
 
-  /* entidades */
   .chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 6px}
   .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--linha);
     background:var(--fundo);border-radius:999px;padding:5px 11px;
@@ -211,11 +285,10 @@
   .chip .n{background:var(--acento);color:var(--cream);border-radius:999px;
     padding:1px 6px;font-size:10.5px}
   @media (prefers-color-scheme: dark){ .chip .n{color:var(--navy)} }
-  .chip.sev-alta{border-left:3px solid var(--alerta)}
+  .chip.sev-critica,.chip.sev-alta{border-left:3px solid var(--alerta)}
   .chip.sev-media{border-left:3px solid var(--atencao)}
   .chip.sev-baixa{border-left:3px solid var(--suave)}
 
-  /* texto anonimizado */
   .painel-texto{display:grid;grid-template-columns:1fr 288px;gap:18px;align-items:start}
   @media (max-width:860px){ .painel-texto{grid-template-columns:1fr} }
   pre.peca{margin:0;padding:18px;background:var(--fundo);border:1px solid var(--linha);
@@ -225,36 +298,32 @@
     padding:1px 3px;font-weight:500;cursor:pointer;border-bottom:1px solid var(--acento)}
   mark.tok:hover{background:var(--acento);color:var(--cream)}
   @media (prefers-color-scheme: dark){
-    mark.tok{color:var(--acento)}
-    mark.tok:hover{background:var(--acento);color:var(--navy)}
+    mark.tok{color:var(--acento)} mark.tok:hover{background:var(--acento);color:var(--navy)}
   }
   mark.tok.foco{background:var(--acento);color:var(--cream);outline:2px solid var(--acento);
     outline-offset:1px}
   @media (prefers-color-scheme: dark){ mark.tok.foco{color:var(--navy)} }
   mark.tok.apagado{background:transparent;color:var(--suave);border-bottom-color:var(--linha)}
 
-  .inspetor{background:var(--fundo);border:1px solid var(--linha);
-    border-radius:var(--raio);padding:15px;position:sticky;top:18px}
+  .inspetor{background:var(--fundo);border:1px solid var(--linha);border-radius:var(--raio);
+    padding:15px;position:sticky;top:76px}
   .inspetor .vazio{color:var(--suave);font-size:13px;margin:0}
-  .inspetor dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;
-    font-size:12.5px}
+  .inspetor dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12.5px}
   .inspetor dt{color:var(--suave);font:500 11px/1.5 var(--font-mono);
     letter-spacing:.06em;text-transform:uppercase}
   .inspetor dd{margin:0;color:var(--texto)}
   .inspetor .tok-nome{font:500 14px/1.3 var(--font-mono);color:var(--acento);
     margin:0 0 12px;word-break:break-all}
 
-  /* achados e quarentena */
   .achado{border-left:3px solid var(--linha);background:var(--fundo);padding:11px 14px;
     border-radius:0 var(--raio) var(--raio) 0;margin-bottom:9px;font-size:13.5px}
-  .achado.alta{border-left-color:var(--alerta);background:var(--alerta-veu)}
+  .achado.critica,.achado.alta{border-left-color:var(--alerta);background:var(--alerta-veu)}
   .achado.media{border-left-color:var(--atencao);background:var(--atencao-veu)}
   .achado.baixa{border-left-color:var(--suave)}
   .achado b{font:600 11px/1 var(--font-mono);letter-spacing:.1em;color:var(--titulo)}
   .achado code{font:400 12.5px/1.5 var(--font-mono);background:var(--papel-2);
-    padding:1px 5px;border-radius:3px}
-  .sem-achado{color:var(--ok);font-size:13.5px;margin:0;display:flex;gap:8px;
-    align-items:center}
+    padding:1px 5px;border-radius:3px;word-break:break-word}
+  .sem-achado{color:var(--ok);font-size:13.5px;margin:0;display:flex;gap:8px;align-items:center}
 
   .quarentena{border:1.5px solid var(--alerta);background:var(--alerta-veu);
     border-radius:var(--raio);padding:16px 18px;margin-bottom:20px}
@@ -269,14 +338,12 @@
   .quarentena .acao{font-weight:600;color:var(--alerta);margin-bottom:0}
 
   .recomendacao{background:var(--papel-2);border-left:3px solid var(--acento);
-    padding:10px 14px;border-radius:0 var(--raio) var(--raio) 0;font-size:13.5px;
-    margin:0 0 8px}
+    padding:10px 14px;border-radius:0 var(--raio) var(--raio) 0;font-size:13.5px;margin:0 0 8px}
 
   .secao{margin-top:22px}
   .trilha{font:400 11.5px/1.7 var(--font-mono);color:var(--suave);margin-top:18px;
     padding-top:14px;border-top:1px solid var(--linha);word-break:break-all}
 
-  /* estados */
   .processando{display:flex;align-items:center;gap:12px;color:var(--suave);
     font-size:14px;padding:26px;justify-content:center}
   .girando{width:16px;height:16px;border:2px solid var(--linha);
@@ -289,7 +356,6 @@
   .rodape{max-width:1180px;margin:0 auto;padding:0 24px 40px;color:var(--suave);
     font-size:12.5px;line-height:1.7}
   .rodape b{color:var(--titulo)}
-
   .oculto{display:none !important}
 </style>
 </head>
@@ -315,7 +381,7 @@
     <div class="divisor-v"></div>
     <div>
       <h1 class="titulo-app">Anonimizador de peças judiciais</h1>
-      <p>Dois agentes independentes: um anonimiza, o outro audita e é o único que aprova.</p>
+      <p>Prepare o documento aqui. Depois use a IA que quiser.</p>
     </div>
     <div class="direita">
       <span class="pilula" id="estado-llm"><span class="ponto"></span><span id="llm-texto">verificando…</span></span>
@@ -324,65 +390,339 @@
   </div>
 </header>
 
+<nav>
+  <div class="abas" role="tablist">
+    <button class="aba" role="tab" data-aba="inicio" aria-selected="true">Início</button>
+    <button class="aba" role="tab" data-aba="anonimizar" aria-selected="false">
+      <span class="num">01</span> Anonimizar</button>
+    <button class="aba" role="tab" data-aba="auditar" aria-selected="false">
+      <span class="num">02</span> Auditar</button>
+    <button class="aba" role="tab" data-aba="verificar" aria-selected="false">
+      <span class="num">03</span> Varredura de injeção</button>
+    <button class="aba" role="tab" data-aba="reidentificar" aria-selected="false">
+      <span class="num">04</span> Reidentificar</button>
+  </div>
+</nav>
+
 <main>
-  <!-- 1. perfil -->
+
+<!-- ====================== INÍCIO ====================== -->
+<section class="painel" id="painel-inicio" role="tabpanel">
+
+  <div class="capa">
+    <p class="kicker">Por que esta ferramenta existe</p>
+    <h2>Pedir à IA que anonimize <span class="destaque">já entrega o dado a ela.</span></h2>
+    <p>Se você manda a petição crua para um modelo e pede "remova os dados pessoais",
+       o CPF, o nome e o endereço <b>já saíram da sua máquina</b> — a anonimização
+       acontece depois da exposição, e não adianta o modelo devolver o texto limpo.
+       Um agente só não resolve isso, porque o problema não é a qualidade da
+       remoção: é a ordem das coisas.</p>
+    <p>Aqui a remoção é <b>determinística e local</b>. Regex e dígito verificador
+       encontram e substituem o dado nesta máquina, sem rede. O que sai depois
+       — se você quiser — já está mascarado. É por isso que esta ferramenta é uma
+       <b>etapa de preparação</b>: rode a peça por aqui e leve o resultado para
+       qualquer IA da sua escolha, sem entregar dado de cliente a ninguém.</p>
+
+    <div class="fluxo">
+      <div class="etapa"><span class="n">01</span><b>Você envia a peça</b>
+        <span>O arquivo é lido em memória nesta máquina. Nada é gravado em disco.</span></div>
+      <div class="etapa"><span class="n">02</span><b>Camada determinística</b>
+        <span>Regex e dígito verificador removem o que é documento. Sem rede, sem modelo.</span></div>
+      <div class="etapa"><span class="n">03</span><b>Auditor independente</b>
+        <span>Um segundo agente redetecta do zero e é o único que pode aprovar.</span></div>
+      <div class="etapa"><span class="n">04</span><b>Você usa onde quiser</b>
+        <span>O texto aprovado vai para ChatGPT, Claude, Gemini, um RAG interno — o que for.</span></div>
+    </div>
+  </div>
+
+  <div class="cartao">
+    <p class="kicker">As quatro ferramentas</p>
+    <p class="legenda">Cada uma resolve um momento diferente. Clique para abrir.</p>
+    <div class="ferramentas">
+      <button class="ferramenta" data-ir="anonimizar">
+        <b>01 · Anonimizar</b>
+        <span>O fluxo completo: o Agente 1 remove os dados pessoais, o Agente 2 audita
+          o resultado e, se achar vazamento, devolve para correção. Sai o texto
+          anonimizado, o parecer e a trilha de auditoria.</span>
+        <span class="abrir">usar →</span>
+      </button>
+      <button class="ferramenta" data-ir="auditar">
+        <b>02 · Auditar</b>
+        <span>Só o Agente 2, sobre um documento que <b>já foi anonimizado</b> — por
+          outro software, por um estagiário com Ctrl+H ou por você mesmo. Responde
+          uma pergunta: ainda dá para identificar alguém aqui?</span>
+        <span class="abrir">usar →</span>
+      </button>
+      <button class="ferramenta" data-ir="verificar">
+        <b>03 · Varredura de injeção</b>
+        <span>O porteiro isolado. Não anonimiza nada: só varre o documento atrás de
+          texto dirigido a sistemas de IA — ordem de ignorar instruções, troca de
+          papel, pedido de aprovação automática, exfiltração.</span>
+        <span class="abrir">usar →</span>
+      </button>
+      <button class="ferramenta" data-ir="reidentificar">
+        <b>04 · Reidentificar</b>
+        <span>O caminho de volta. Com o cofre da sessão aberta, devolve os dados reais
+          ao texto anonimizado — para juntar ao processo o que a IA produziu sobre a
+          versão limpa.</span>
+        <span class="abrir">usar →</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="duas">
+    <div class="cartao">
+      <h2>Por que dois agentes</h2>
+      <p class="corpo">Um agente só conseguiria fazer as duas coisas. O problema é que
+        ele estaria <strong>conferindo o próprio trabalho</strong> — e quem produz um
+        texto é péssimo juiz dele. Se o anonimizador não percebeu que "o único
+        operador de empilhadeira afastado por LER na unidade de Sorocaba" identifica
+        uma pessoa, ele também não vai perceber isso ao revisar: é o mesmo raciocínio,
+        com os mesmos pontos cegos, rodando duas vezes.</p>
+      <table class="comparativo">
+        <tr><th></th><th>Agente 1</th><th>Agente 2</th></tr>
+        <tr><td>pergunta</td><td>o que aqui é dado pessoal?</td>
+            <td>ainda dá para identificar alguém?</td></tr>
+        <tr><td>entrada</td><td>peça original</td><td>peça já anonimizada</td></tr>
+        <tr><td>viés</td><td>equilíbrio: não mutilar a peça</td>
+            <td>paranoia: limiar mais baixo</td></tr>
+        <tr><td>confia no outro</td><td>não</td><td>não — redetecta do zero</td></tr>
+        <tr><td>pode aprovar</td><td>não</td><td>sim, e é o único</td></tr>
+      </table>
+    </div>
+
+    <div class="cartao">
+      <h2>O que o auditor verifica</h2>
+      <p class="legenda">Seis verificações, toda vez. Silêncio nunca vira aprovação:
+        verificação pedida e não executada reprova.</p>
+      <ul class="lista">
+        <li><strong>Dado residual</strong> — redetecta do zero no texto entregue, com
+          limiar de confiança menor que o do anonimizador.</li>
+        <li><strong>Confronto com o original</strong> — compara entrada e saída para
+          achar o que passou batido.</li>
+        <li><strong>Integridade do texto</strong> — garante que a peça não foi
+          reescrita: todo trecho preservado precisa existir no original, na mesma ordem.</li>
+        <li><strong>Injeção de prompt</strong> — sim, faz parte de toda auditoria.
+          Varre o documento atrás de instruções dirigidas a IA.</li>
+        <li><strong>Cofre</strong> — confere se algum valor real vazou para o mapa de
+          pseudônimos.</li>
+        <li><strong>Camada semântica</strong> — quando ligada, um modelo procura o que
+          a regex não pega: referências indiretas e singularizações.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cartao">
+    <p class="kicker">O que é detectado</p>
+    <p class="legenda">Em verde, os tipos com <strong>dígito verificador</strong>: não são
+      palpite, são prova matemática. Os demais vêm de padrão e heurística, e é por isso
+      que o auditor existe.</p>
+    <div class="tipos">
+      <span class="tipo verificado">CPF</span><span class="tipo verificado">CNPJ</span>
+      <span class="tipo verificado">PIS</span><span class="tipo verificado">CNH</span>
+      <span class="tipo verificado">TITULO_ELEITOR</span>
+      <span class="tipo verificado">PROCESSO_CNJ</span><span class="tipo verificado">CARTAO</span>
+      <span class="tipo">NOME_PESSOA</span><span class="tipo">NOME_EMPRESA</span>
+      <span class="tipo">RG</span><span class="tipo">OAB</span><span class="tipo">CTPS</span>
+      <span class="tipo">MATRICULA</span><span class="tipo">ENDERECO</span>
+      <span class="tipo">CEP</span><span class="tipo">LOCALIDADE</span>
+      <span class="tipo">TELEFONE</span><span class="tipo">EMAIL</span>
+      <span class="tipo">DATA_NASCIMENTO</span><span class="tipo">CONTA_BANCARIA</span>
+      <span class="tipo">CHAVE_PIX</span><span class="tipo">PLACA_VEICULO</span>
+      <span class="tipo">IP</span><span class="tipo">DADO_SENSIVEL</span>
+    </div>
+    <div class="nota">
+      <b>Sobre a camada semântica.</b> Ela é opcional e vem desligada. Quando ligada,
+      o texto que chega ao modelo <b>já passou pela remoção determinística e pelo
+      mascaramento</b> — o provedor nunca vê o CPF real. Mesmo assim, se o seu cliente
+      proíbe qualquer envio externo, deixe desligada: o sistema entrega a maior parte
+      do valor sem ela, a custo zero.
+    </div>
+  </div>
+
+  <div class="cartao">
+    <p class="kicker">Os perfis</p>
+    <p class="legenda">O perfil ajusta os dois agentes de uma vez. Escolha pelo destino
+      do documento, não pelo gosto.</p>
+    <div class="perfis" id="perfis-inicio"></div>
+  </div>
+
+  <div class="cartao">
+    <h2>O que esta ferramenta não faz</h2>
+    <ul class="lista">
+      <li>Não substitui a revisão de quem responde pela peça. Nenhuma anonimização
+        automática é garantia.</li>
+      <li>Não lê imagem: PDF digitalizado sem camada de texto ainda não passa por OCR.</li>
+      <li>Não guarda nada. Fechou o processo, acabou a sessão e o cofre some junto.</li>
+      <li>Não deixa o modelo reescrever a peça — a verificação de integridade existe
+        exatamente para barrar isso.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====================== ANONIMIZAR ====================== -->
+<section class="painel" id="painel-anonimizar" role="tabpanel" hidden>
+  <div class="cartao">
+    <h2>Anonimizar e auditar</h2>
+    <p class="corpo">O fluxo completo. O Agente 1 remove os dados pessoais e substitui
+      cada um por um pseudônimo estável; o Agente 2 redetecta do zero e, se encontrar
+      vazamento, devolve a peça para correção. O laço repete até o auditor aprovar ou
+      até o limite de rodadas do perfil.</p>
+  </div>
+
   <section class="cartao">
-    <p class="kicker"><span class="passo">1</span> Perfil de anonimização</p>
-    <p class="legenda">O perfil ajusta os dois agentes de uma vez — o que é removido,
-      quão desconfiado fica o auditor e quantas rodadas de correção ele exige.</p>
+    <p class="kicker"><span class="passo">1</span> Perfil</p>
     <div class="perfis" id="perfis"></div>
   </section>
 
-  <!-- 2. documentos -->
   <section class="cartao">
     <p class="kicker"><span class="passo">2</span> Documentos</p>
-    <p class="legenda">Os arquivos são processados nesta máquina. Nada é gravado em disco
-      e nada sai para a rede enquanto a camada semântica estiver desligada.</p>
-
-    <div id="zona" tabindex="0" role="button">
-      <b>Arraste as peças aqui ou clique para escolher</b>
-      Vários arquivos no mesmo envio compartilham o cofre — a mesma pessoa
-      recebe o mesmo pseudônimo em todos eles.
-      <span class="formatos" id="formatos"></span>
-    </div>
-    <input type="file" id="arquivo" multiple class="oculto">
-    <ul class="arquivos" id="lista"></ul>
-
-    <div class="ou">ou</div>
-    <textarea id="texto" placeholder="Cole aqui o texto da peça."></textarea>
-
+    <p class="legenda">Vários arquivos no mesmo envio compartilham o cofre — a mesma
+      pessoa recebe o mesmo pseudônimo em todos eles.</p>
+    <div data-entrada="anon"></div>
     <div class="linha">
       <button id="anonimizar">Anonimizar e auditar</button>
-      <button id="auditar" class="secundario">Só auditar</button>
-      <label class="caixa">
-        <input type="checkbox" id="llm"> camada semântica (Claude)
-      </label>
+      <label class="caixa"><input type="checkbox" id="llm"> camada semântica (Claude)</label>
     </div>
-    <p class="erro" id="erro"></p>
+    <p class="erro" data-erro="anon"></p>
   </section>
 
-  <!-- sessão -->
-  <section class="cartao oculto" id="painel-sessao">
+  <div data-resultados="anon"></div>
+</section>
+
+<!-- ====================== AUDITAR ====================== -->
+<section class="painel" id="painel-auditar" role="tabpanel" hidden>
+  <div class="cartao">
+    <h2>Auditar documento já anonimizado</h2>
+    <p class="corpo">Aqui roda <strong>só o Agente 2</strong>, e ele não precisa saber
+      quem anonimizou o documento. Serve para conferir o trabalho de outro software, de
+      um script de substituição ou de alguém que passou o Ctrl+H — e também para revisar
+      um lote antigo antes de levá-lo para uma IA.</p>
+    <p class="corpo">Ele redetecta tudo do zero, com limiar mais baixo que o do
+      anonimizador, e responde uma única pergunta: <strong>ainda dá para identificar
+      alguém aqui?</strong></p>
+  </div>
+
+  <section class="cartao">
+    <p class="kicker"><span class="passo">1</span> Rigor da auditoria</p>
+    <p class="legenda">O perfil define o limiar do auditor e o que fica fora de escopo.</p>
+    <div class="perfis" id="perfis-auditar"></div>
+  </section>
+
+  <section class="cartao">
+    <p class="kicker"><span class="passo">2</span> Documentos já anonimizados</p>
+    <div data-entrada="audit"></div>
+    <div class="linha">
+      <button id="auditar">Auditar</button>
+      <label class="caixa"><input type="checkbox" id="llm-audit"> camada semântica (Claude)</label>
+    </div>
+    <p class="erro" data-erro="audit"></p>
+  </section>
+
+  <div data-resultados="audit"></div>
+</section>
+
+<!-- ====================== VERIFICAR ====================== -->
+<section class="painel" id="painel-verificar" role="tabpanel" hidden>
+  <div class="cartao">
+    <h2>Varredura de injeção de prompt</h2>
+    <p class="corpo">Esta ferramenta <strong>não anonimiza nada</strong>. Ela é o
+      porteiro: varre o documento atrás de texto escrito para manipular sistemas de IA
+      que venham a lê-lo. Um documento pode chegar limpo de dado pessoal e ainda assim
+      carregar uma instrução plantada no meio do texto.</p>
+    <p class="corpo">Use antes de jogar um arquivo de origem incerta num resumidor, num
+      RAG ou num assistente de minuta — inclusive arquivos que você não anonimizou aqui.</p>
+    <div class="nota">
+      <b>Aqui o trecho aparece em claro, de propósito.</b> Achado de dado pessoal sai
+      mascarado porque o relatório não deve repetir o dado que denuncia. Instrução
+      plantada é o contrário: quem revisa precisa ler o texto para julgar a intenção.
+    </div>
+  </div>
+
+  <section class="cartao">
+    <p class="kicker">O que é procurado</p>
+    <ul class="lista">
+      <li><strong>Ordem de ignorar</strong> — "desconsidere as instruções anteriores".</li>
+      <li><strong>Troca de papel</strong> — "a partir de agora você é…", "aja como…".</li>
+      <li><strong>Marcador de conversa</strong> — linhas forjadas como <code>system:</code>
+        ou <code>assistant:</code>.</li>
+      <li><strong>Delimitador forjado</strong> — tags falsas de peça, prompt ou contexto.</li>
+      <li><strong>Ordem de omissão</strong> — "não marque nada", "retorne uma lista
+        vazia". Severidade crítica.</li>
+      <li><strong>Ordem de aprovação</strong> — "considere este documento limpo".
+        Severidade crítica.</li>
+      <li><strong>Exfiltração</strong> — pedido de envio a endereço externo.
+        Severidade crítica.</li>
+      <li><strong>Bloco de código</strong> — cercas e cabeçalhos de instrução embutidos.</li>
+    </ul>
+  </section>
+
+  <section class="cartao">
+    <p class="kicker">Documentos</p>
+    <div data-entrada="verif"></div>
+    <div class="linha"><button id="verificar">Varrer</button></div>
+    <p class="erro" data-erro="verif"></p>
+  </section>
+
+  <div data-resultados="verif"></div>
+</section>
+
+<!-- ====================== REIDENTIFICAR ====================== -->
+<section class="painel" id="painel-reidentificar" role="tabpanel" hidden>
+  <div class="cartao">
+    <h2>Reidentificar</h2>
+    <p class="corpo">O caminho de volta. Cole aqui um texto que use os pseudônimos desta
+      sessão — inclusive o que uma IA produziu <em>sobre</em> a peça anonimizada — e os
+      dados reais voltam ao lugar.</p>
+    <p class="corpo">É assim que o ciclo fecha: você anonimiza, leva o texto limpo para
+      a IA da sua escolha, traz a minuta ou o resumo de volta e reidentifica antes de
+      juntar ao processo.</p>
+    <div class="nota">
+      <b>Isto só funciona com o cofre da sessão aberto.</b> Sem cofre não há volta — e é
+      assim que deve ser. Registre quem reidentificou, quando e com que base legal.
+    </div>
+  </div>
+
+  <section class="cartao">
+    <p class="kicker">Texto com pseudônimos</p>
+    <textarea id="texto-reid" class="mono"
+      placeholder="Cole o texto anonimizado, ou o que a IA devolveu sobre ele."></textarea>
+    <div class="linha">
+      <button id="reidentificar">Reidentificar</button>
+      <span class="id-sessao" id="aviso-reid"></span>
+    </div>
+    <p class="erro" data-erro="reid"></p>
+  </section>
+
+  <section class="cartao oculto" id="saida-reid">
     <div class="barra">
-      <div>
-        <p class="kicker" style="margin-bottom:6px">Cofre da sessão</p>
-        <span class="id-sessao" id="resumo-sessao"></span>
-      </div>
-      <div class="linha" style="margin:0">
-        <button class="secundario pequeno" id="baixar-cofre">Baixar cofre</button>
-        <button class="secundario pequeno" id="reidentificar">Reidentificar</button>
-        <button class="secundario pequeno" id="encerrar">Encerrar e apagar</button>
-      </div>
+      <p class="kicker" style="margin:0">Texto reidentificado</p>
+      <button class="secundario pequeno" id="baixar-reid">Baixar .txt</button>
     </div>
-    <p class="cofre-aviso">
-      <b>O cofre é o mapa de volta aos dados reais.</b> Ele existe só na memória
-      deste servidor e desaparece quando você encerra a sessão ou fecha o processo.
-      Se baixar, guarde-o <b>separado</b> das peças anonimizadas: quem tiver os dois
-      juntos desfaz a anonimização inteira.
-    </p>
+    <pre class="peca" id="resultado-reid" style="margin-top:14px"></pre>
   </section>
+</section>
 
-  <div id="resultados"></div>
+<!-- sessão: vale para todas as abas -->
+<section class="cartao oculto" id="painel-sessao">
+  <div class="barra">
+    <div>
+      <p class="kicker" style="margin-bottom:6px">Cofre da sessão</p>
+      <span class="id-sessao" id="resumo-sessao"></span>
+    </div>
+    <div class="linha" style="margin:0">
+      <button class="secundario pequeno" id="baixar-cofre">Baixar cofre</button>
+      <button class="secundario pequeno" id="encerrar">Encerrar e apagar</button>
+    </div>
+  </div>
+  <p class="cofre-aviso">
+    <b>O cofre é o mapa de volta aos dados reais.</b> Ele existe só na memória deste
+    servidor e desaparece quando você encerra a sessão ou fecha o processo. Se baixar,
+    guarde-o <b>separado</b> das peças anonimizadas: quem tiver os dois juntos desfaz a
+    anonimização inteira.
+  </p>
+</section>
+
 </main>
 
 <footer class="rodape">
@@ -393,7 +733,9 @@
 
 <script>
 const $ = s => document.querySelector(s);
-let perfilAtivo = "padrao", arquivos = [], sessao = null, ultimos = null;
+const $$ = s => [...document.querySelectorAll(s)];
+let sessao = null, formatos = [], listaPerfis = [];
+const perfilDe = {anon:"padrao", audit:"padrao"};
 
 async function api(rota, corpo){
   const r = await fetch(rota, corpo ? {
@@ -404,75 +746,71 @@ async function api(rota, corpo){
   if(!r.ok) throw new Error(dados.erro || ("erro " + r.status));
   return dados;
 }
-
 function escapar(t){
   return String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 }
 const RE_TOKEN = /\[[A-Z_]+_[0-9a-f]+[a-z]?\]/g;
-
 function baixar(nome, conteudo, tipo){
   const url = URL.createObjectURL(new Blob([conteudo], {type: tipo}));
   const a = Object.assign(document.createElement("a"), {href:url, download:nome});
   a.click(); URL.revokeObjectURL(url);
 }
 
-// ---- estado inicial -------------------------------------------------------
-api("/api/estado").then(estado => {
-  $("#versao").textContent = "v" + estado.versao;
-  $("#formatos").textContent = "aceita " + estado.formatos.join("  ·  ");
-  $("#perfis").innerHTML = estado.perfis.map(p => `
-    <div class="perfil ${p.chave===perfilAtivo?"ativo":""}" data-chave="${p.chave}"
-         tabindex="0" role="button">
-      <b>${escapar(p.nome)}</b>
-      <span>${escapar(p.descricao)}<br><i>${escapar(p.quando_usar)}</i></span>
-      ${p.tipos_preservados.length
-        ? `<div class="preserva">preserva: ${p.tipos_preservados.join(", ")}</div>` : ""}
-    </div>`).join("");
-  document.querySelectorAll(".perfil").forEach(el => {
-    const escolher = () => {
-      perfilAtivo = el.dataset.chave;
-      document.querySelectorAll(".perfil").forEach(o => o.classList.remove("ativo"));
-      el.classList.add("ativo");
-    };
-    el.onclick = escolher;
-    el.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); escolher(); } };
-  });
-
-  const pil = $("#estado-llm");
-  if(estado.llm.disponivel){
-    pil.classList.add("viva");
-    $("#llm-texto").textContent = "Claude disponível";
-    $("#llm").checked = estado.llm.padrao;
-  } else {
-    $("#llm").disabled = true;
-    $("#llm-texto").textContent = "só determinístico";
-    pil.title = estado.llm.motivo || "";
-  }
-}).catch(e => { $("#erro").textContent = e.message; });
-
-// ---- arquivos -------------------------------------------------------------
-const zona = $("#zona");
-zona.onclick = () => $("#arquivo").click();
-zona.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); $("#arquivo").click(); } };
-zona.ondragover = e => { e.preventDefault(); zona.classList.add("sobre"); };
-zona.ondragleave = () => zona.classList.remove("sobre");
-zona.ondrop = e => {
-  e.preventDefault(); zona.classList.remove("sobre");
-  receber([...e.dataTransfer.files]);
-};
-$("#arquivo").onchange = e => receber([...e.target.files]);
-
-function receber(lista){ lista.forEach(f => arquivos.push(f)); desenharArquivos(); }
-
-function desenharArquivos(){
-  $("#lista").innerHTML = arquivos.map((f,i) =>
-    `<li><span>${escapar(f.name)} <span class="peso">${(f.size/1024).toFixed(0)} kB</span></span>
-     <button data-i="${i}" title="remover" aria-label="remover ${escapar(f.name)}">&times;</button></li>`
-  ).join("");
-  document.querySelectorAll("#lista button").forEach(b => b.onclick = () => {
-    arquivos.splice(+b.dataset.i, 1); desenharArquivos();
-  });
+// ---- navegação por abas ---------------------------------------------------
+function irPara(nome){
+  $$(".aba").forEach(b => b.setAttribute("aria-selected", String(b.dataset.aba === nome)));
+  $$(".painel").forEach(p => { p.hidden = p.id !== "painel-" + nome; });
+  window.scrollTo({top:0, behavior:"instant"});
 }
+$$(".aba").forEach(b => b.onclick = () => irPara(b.dataset.aba));
+$$("[data-ir]").forEach(b => b.onclick = () => irPara(b.dataset.ir));
+
+// ---- entrada de documentos (reaproveitada em 3 abas) ----------------------
+const entradas = {};
+function montarEntrada(chave){
+  const alvo = document.querySelector(`[data-entrada="${chave}"]`);
+  alvo.innerHTML = `
+    <div class="zona" tabindex="0" role="button">
+      <b>Arraste os arquivos aqui ou clique para escolher</b>
+      <span class="formatos"></span>
+    </div>
+    <input type="file" multiple class="oculto">
+    <ul class="arquivos"></ul>
+    <div class="ou">ou</div>
+    <textarea placeholder="Cole aqui o texto."></textarea>`;
+
+  const estado = {
+    arquivos: [],
+    zona: alvo.querySelector(".zona"),
+    input: alvo.querySelector("input[type=file]"),
+    lista: alvo.querySelector(".arquivos"),
+    area: alvo.querySelector("textarea"),
+  };
+  const redesenhar = () => {
+    estado.lista.innerHTML = estado.arquivos.map((f,i) =>
+      `<li><span>${escapar(f.name)} <span class="peso">${(f.size/1024).toFixed(0)} kB</span></span>
+       <button data-i="${i}" aria-label="remover ${escapar(f.name)}">&times;</button></li>`).join("");
+    estado.lista.querySelectorAll("button").forEach(b => b.onclick = () => {
+      estado.arquivos.splice(+b.dataset.i, 1); redesenhar();
+    });
+  };
+  const receber = l => { l.forEach(f => estado.arquivos.push(f)); redesenhar(); };
+
+  estado.zona.onclick = () => estado.input.click();
+  estado.zona.onkeydown = e => {
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); estado.input.click(); }
+  };
+  estado.zona.ondragover = e => { e.preventDefault(); estado.zona.classList.add("sobre"); };
+  estado.zona.ondragleave = () => estado.zona.classList.remove("sobre");
+  estado.zona.ondrop = e => {
+    e.preventDefault(); estado.zona.classList.remove("sobre");
+    receber([...e.dataTransfer.files]);
+  };
+  estado.input.onchange = e => receber([...e.target.files]);
+  entradas[chave] = estado;
+}
+["anon","audit","verif"].forEach(montarEntrada);
+
 function lerBase64(arquivo){
   return new Promise((ok, falha) => {
     const leitor = new FileReader();
@@ -482,42 +820,93 @@ function lerBase64(arquivo){
   });
 }
 
-// ---- envio ----------------------------------------------------------------
-async function enviar(rota){
-  $("#erro").textContent = "";
-  const texto = $("#texto").value.trim();
-  if(!arquivos.length && !texto){
-    $("#erro").textContent = "Envie um arquivo ou cole um texto."; return;
+// ---- estado inicial -------------------------------------------------------
+function desenharPerfis(alvo, chave){
+  const caixa = $(alvo);
+  if(!caixa) return;
+  const selecionavel = Boolean(chave);
+  caixa.innerHTML = listaPerfis.map(p => `
+    <${selecionavel ? "button" : "div"} class="perfil ${chave && p.chave===perfilDe[chave]?"ativo":""}"
+       data-chave="${p.chave}" ${selecionavel ? 'type="button"' : ""}>
+      <b>${escapar(p.nome)}</b>
+      <span>${escapar(p.descricao)}<br><i>${escapar(p.quando_usar)}</i></span>
+      ${p.tipos_preservados.length
+        ? `<div class="preserva">preserva: ${p.tipos_preservados.join(", ")}</div>` : ""}
+    </${selecionavel ? "button" : "div"}>`).join("");
+  if(!selecionavel) return;
+  caixa.querySelectorAll(".perfil").forEach(el => el.onclick = () => {
+    perfilDe[chave] = el.dataset.chave;
+    caixa.querySelectorAll(".perfil").forEach(o => o.classList.remove("ativo"));
+    el.classList.add("ativo");
+  });
+}
+
+api("/api/estado").then(estado => {
+  $("#versao").textContent = "v" + estado.versao;
+  formatos = estado.formatos;
+  listaPerfis = estado.perfis;
+  $$(".zona .formatos").forEach(s => s.textContent = "aceita " + formatos.join("  ·  "));
+  desenharPerfis("#perfis", "anon");
+  desenharPerfis("#perfis-auditar", "audit");
+  desenharPerfis("#perfis-inicio", null);
+
+  const pil = $("#estado-llm");
+  if(estado.llm.disponivel){
+    pil.classList.add("viva");
+    $("#llm-texto").textContent = "Claude disponível";
+    $("#llm").checked = estado.llm.padrao;
+  } else {
+    $("#llm").disabled = true;
+    $("#llm-audit").disabled = true;
+    $("#llm-texto").textContent = "só determinístico";
+    pil.title = estado.llm.motivo || "";
   }
-  const botoes = document.querySelectorAll("#anonimizar,#auditar");
-  botoes.forEach(b => b.disabled = true);
-  const quantos = arquivos.length + (texto ? 1 : 0);
-  $("#resultados").innerHTML =
-    `<div class="cartao"><div class="processando"><span class="girando"></span>
-     analisando ${quantos} documento(s) — detecção determinística, auditoria e correção</div></div>`;
+}).catch(e => { $('[data-erro="anon"]').textContent = e.message; });
+
+// ---- envio ----------------------------------------------------------------
+async function enviar(chave, rota, extra, modo){
+  const erro = document.querySelector(`[data-erro="${chave}"]`);
+  const caixa = document.querySelector(`[data-resultados="${chave}"]`);
+  const entrada = entradas[chave];
+  erro.textContent = "";
+
+  const texto = entrada.area.value.trim();
+  if(!entrada.arquivos.length && !texto){
+    erro.textContent = "Envie um arquivo ou cole um texto."; return;
+  }
+  const botao = document.querySelector(`#${chave === "anon" ? "anonimizar"
+                : chave === "audit" ? "auditar" : "verificar"}`);
+  botao.disabled = true;
+  const quantos = entrada.arquivos.length + (texto ? 1 : 0);
+  caixa.innerHTML = `<div class="cartao"><div class="processando">
+    <span class="girando"></span>${escapar(modo === "verif"
+      ? `varrendo ${quantos} documento(s)`
+      : `analisando ${quantos} documento(s)`)}</div></div>`;
   try{
-    const corpo = {perfil:perfilAtivo, usar_llm:$("#llm").checked, sessao, texto, arquivos:[]};
-    for(const f of arquivos){
+    const corpo = Object.assign({sessao, texto, arquivos: []}, extra || {});
+    for(const f of entrada.arquivos){
       corpo.arquivos.push({nome:f.name, conteudo: await lerBase64(f)});
     }
     const dados = await api(rota, corpo);
     if(dados.sessao){
       sessao = dados.sessao;
       $("#painel-sessao").classList.remove("oculto");
-      $("#resumo-sessao").textContent =
-        `${dados.sessao} · ${dados.itens_no_cofre} entrada(s)`;
+      $("#resumo-sessao").textContent = `${dados.sessao} · ${dados.itens_no_cofre} entrada(s)`;
+      atualizarReid();
     }
-    ultimos = dados;
-    desenhar(dados, rota === "/api/anonimizar");
+    desenhar(caixa, dados, modo);
   }catch(e){
-    $("#resultados").innerHTML = "";
-    $("#erro").textContent = e.message;
+    caixa.innerHTML = "";
+    erro.textContent = e.message;
   }finally{
-    botoes.forEach(b => b.disabled = false);
+    botao.disabled = false;
   }
 }
-$("#anonimizar").onclick = () => enviar("/api/anonimizar");
-$("#auditar").onclick = () => enviar("/api/auditar");
+$("#anonimizar").onclick = () => enviar("anon", "/api/anonimizar",
+  {perfil: perfilDe.anon, usar_llm: $("#llm").checked}, "anon");
+$("#auditar").onclick = () => enviar("audit", "/api/auditar",
+  {perfil: perfilDe.audit, usar_llm: $("#llm-audit").checked}, "audit");
+$("#verificar").onclick = () => enviar("verif", "/api/verificar", {}, "verif");
 
 // ---- resultados -----------------------------------------------------------
 const ROTULOS = {
@@ -528,77 +917,76 @@ const ROTULOS = {
   cofre:     ["Cofre", "confere se algum valor real vazou para o cofre"],
   semantica: ["Camada semântica", "leitura por modelo de linguagem"],
 };
-
 function corDoRisco(n){
   if(n === 0) return "var(--ok)";
   if(n <= 25) return "var(--atencao)";
   return "var(--alerta)";
 }
-
 function verificacoes(parecer){
-  const v = parecer.verificacoes || {};
-  return Object.entries(v).map(([k, valor]) => {
+  return Object.entries(parecer.verificacoes || {}).map(([k, valor]) => {
     const [nome, explica] = ROTULOS[k] || [k, ""];
     let classe = "limpa", marca = "✓";
     if(/desativada|não executada|nao executada/i.test(valor)){ classe = "off"; marca = "—"; }
     else if(!/^0 /.test(valor)){ classe = "suja"; marca = "!"; }
-    return `<li class="verif ${classe}">
-      <span class="marca-v">${marca}</span>
-      <span><b>${escapar(nome)}</b><span>${escapar(valor)}${explica ? " · " + explica : ""}</span></span>
-    </li>`;
+    return `<li class="verif ${classe}"><span class="marca-v">${marca}</span>
+      <span><b>${escapar(nome)}</b><span>${escapar(valor)}${explica ? " · " + explica : ""}</span></span></li>`;
   }).join("");
 }
-
 function chipsDeTipo(anon){
   if(!anon || !anon.total_por_tipo) return "";
   const sev = {};
   (anon.ocorrencias || []).forEach(o => { sev[o.tipo] = o.severidade || "baixa"; });
-  return Object.entries(anon.total_por_tipo)
-    .sort((a,b) => b[1] - a[1])
+  return Object.entries(anon.total_por_tipo).sort((a,b) => b[1] - a[1])
     .map(([t,n]) => `<button class="chip sev-${sev[t]||"baixa"}" data-tipo="${t}">
         ${t}<span class="n">${n}</span></button>`).join("");
 }
-
 function textoComTokens(txt){
   return escapar(txt).replace(RE_TOKEN, m =>
     `<mark class="tok" data-tok="${m}" data-tipo="${m.slice(1, m.lastIndexOf("_"))}"
        tabindex="0" role="button">${m}</mark>`);
 }
 
-function desenhar(dados, comTexto){
-  $("#resultados").innerHTML = dados.documentos.map((d, i) => {
+function desenhar(caixa, dados, modo){
+  caixa.innerHTML = dados.documentos.map((d, i) => {
     if(d.erro) return `<section class="cartao doc">
-      <div class="doc-cabeca"><div class="barra">
-        <h3>${escapar(d.nome)}</h3><span class="selo mau">falhou</span></div></div>
+      <div class="doc-cabeca"><div class="barra"><h3>${escapar(d.nome)}</h3>
+        <span class="selo mau">falhou</span></div></div>
       <div class="doc-corpo"><p class="legenda" style="margin:0">${escapar(d.erro)}</p></div>
     </section>`;
 
     const parecer = d.relatorio.parecer;
     const anon = d.relatorio.anonimizacao;
     const alertas = parecer.alertas_de_seguranca || [];
-    const selo = d.aprovado ? `<span class="selo ok">aprovado pelo auditor</span>`
-                            : `<span class="selo mau">reprovado</span>`;
 
-    const quarentena = alertas.length ? `
+    // Na varredura isolada os próprios achados são os alertas.
+    const injecoes = modo === "verif" ? parecer.achados : alertas;
+    const selo = modo === "verif"
+      ? (d.aprovado ? `<span class="selo ok">nenhuma injeção</span>`
+                    : `<span class="selo mau">injeção encontrada</span>`)
+      : (d.aprovado ? `<span class="selo ok">aprovado pelo auditor</span>`
+                    : `<span class="selo mau">reprovado</span>`);
+
+    const quarentena = injecoes.length ? `
       <div class="quarentena">
-        <h4>⚠ Quarentena — tentativa de injeção de prompt</h4>
-        <p>Este documento contém ${alertas.length} trecho(s) com forma de instrução
-           dirigida a sistemas de IA. Foram tratados como dado, nunca como comando,
-           e a anonimização seguiu normalmente.</p>
-        <ul>${alertas.map(a => `<li><b>${escapar(a.gravidade || "")} · ${escapar(a.tipo || "")}</b>
+        <h4>⚠ ${modo === "verif" ? "Instrução dirigida a IA encontrada"
+                                 : "Quarentena — tentativa de injeção de prompt"}</h4>
+        <p>${injecoes.length} trecho(s) com forma de instrução dirigida a sistemas de IA.
+           ${modo === "verif" ? "Este documento não foi anonimizado — a varredura só aponta."
+             : "Foram tratados como dado, nunca como comando, e a anonimização seguiu normalmente."}</p>
+        <ul>${injecoes.map(a => `<li><b>${escapar(a.gravidade||"")} · ${escapar(a.tipo||"")}</b>
              ${escapar(a.trecho || a.descricao || "")}</li>`).join("")}</ul>
         <p class="acao">Não encaminhe este arquivo a outro sistema de IA antes que
            alguém leia os trechos acima.</p>
       </div>` : "";
 
-    const achados = parecer.achados.length
+    const achados = modo === "verif" ? "" : (parecer.achados.length
       ? parecer.achados.map(a => `<div class="achado ${a.gravidade}">
           <b>${escapar((a.gravidade||"").toUpperCase())} · ${escapar(a.categoria||"")} · ${escapar(a.tipo||"")}</b>
           ${a.trecho ? ` <code>${escapar(a.trecho)}</code>` : ""}
           <br>${escapar(a.descricao||"")}</div>`).join("")
-      : `<p class="sem-achado">✓ O auditor redetectou do zero e não encontrou dado pessoal remanescente.</p>`;
+      : `<p class="sem-achado">✓ O auditor redetectou do zero e não encontrou dado pessoal remanescente.</p>`);
 
-    const painel = comTexto ? `
+    const painel = modo === "anon" ? `
       <div class="secao">
         <p class="kicker">Peça anonimizada</p>
         <div class="chips" data-chips="${i}">${chipsDeTipo(anon)}</div>
@@ -607,8 +995,7 @@ function desenhar(dados, comTexto){
         <div class="painel-texto">
           <pre class="peca" data-peca="${i}">${textoComTokens(d.texto_anonimizado)}</pre>
           <aside class="inspetor" data-inspetor="${i}">
-            <p class="vazio">Nenhum marcador selecionado.</p>
-          </aside>
+            <p class="vazio">Nenhum marcador selecionado.</p></aside>
         </div>
       </div>` : "";
 
@@ -621,37 +1008,36 @@ function desenhar(dados, comTexto){
     return `<section class="cartao doc">
       <div class="doc-cabeca">
         <div class="barra">
-          <div>
-            <h3>${escapar(d.nome)}</h3>
+          <div><h3>${escapar(d.nome)}</h3>
             <div class="linha" style="margin-top:8px;gap:8px">
               ${selo}
-              ${alertas.length ? `<span class="selo quarentena-selo">quarentena</span>` : ""}
+              ${injecoes.length && modo !== "verif" ? `<span class="selo quarentena-selo">quarentena</span>` : ""}
               ${anon ? `<span class="selo neutro">${anon.total_ocorrencias} substituição(ões)</span>` : ""}
+              ${modo === "verif" ? `<span class="selo neutro">${d.caracteres} caracteres</span>` : ""}
             </div>
           </div>
-          ${comTexto ? `<div class="linha" style="margin:0">
+          ${modo === "anon" ? `<div class="linha" style="margin:0">
             <button class="secundario pequeno" data-baixar="${i}">Baixar .txt</button>
             <button class="secundario pequeno" data-relatorio="${i}">Relatório .json</button>
           </div>` : ""}
         </div>
         <div class="medidor">
-          <div class="medidor-topo"><span>nota de risco residual</span>
+          <div class="medidor-topo">
+            <span>${modo === "verif" ? "risco de manipulação" : "nota de risco residual"}</span>
             <span>${d.nota_risco}/100</span></div>
-          <div class="medidor-trilho">
-            <div class="medidor-barra" style="width:${Math.max(d.nota_risco,2)}%;
-                 background:${corDoRisco(d.nota_risco)}"></div>
-          </div>
+          <div class="medidor-trilho"><div class="medidor-barra"
+            style="width:${Math.max(d.nota_risco,2)}%;background:${corDoRisco(d.nota_risco)}"></div></div>
         </div>
       </div>
       <div class="doc-corpo">
         ${quarentena}
-        <p class="kicker">Verificações do auditor</p>
-        <ul class="verificacoes">${verificacoes(parecer)}</ul>
+        ${modo === "verif" && !injecoes.length
+          ? `<p class="sem-achado">✓ Nenhuma instrução dirigida a sistemas de IA foi
+             encontrada neste documento.</p>`
+          : `<p class="kicker">Verificações do auditor</p>
+             <ul class="verificacoes">${verificacoes(parecer)}</ul>`}
         ${painel}
-        <div class="secao">
-          <p class="kicker">Achados</p>
-          ${achados}
-        </div>
+        ${achados ? `<div class="secao"><p class="kicker">Achados</p>${achados}</div>` : ""}
         ${(parecer.recomendacoes||[]).length ? `<div class="secao">
           <p class="kicker">Recomendações</p>
           ${parecer.recomendacoes.map(r => `<p class="recomendacao">${escapar(r)}</p>`).join("")}
@@ -661,24 +1047,21 @@ function desenhar(dados, comTexto){
     </section>`;
   }).join("");
 
-  // --- interações pós-render ---
-  document.querySelectorAll("[data-baixar]").forEach(b => b.onclick = () => {
+  caixa.querySelectorAll("[data-baixar]").forEach(b => b.onclick = () => {
     const d = dados.documentos[+b.dataset.baixar];
-    baixar(d.nome.replace(/\.[^.]+$/,"") + "_anonimizado.txt",
-           d.texto_anonimizado, "text/plain");
+    baixar(d.nome.replace(/\.[^.]+$/,"") + "_anonimizado.txt", d.texto_anonimizado, "text/plain");
   });
-  document.querySelectorAll("[data-relatorio]").forEach(b => b.onclick = () => {
+  caixa.querySelectorAll("[data-relatorio]").forEach(b => b.onclick = () => {
     const d = dados.documentos[+b.dataset.relatorio];
     baixar(d.nome.replace(/\.[^.]+$/,"") + "_relatorio.json",
            JSON.stringify(d.relatorio, null, 2), "application/json");
   });
 
   dados.documentos.forEach((d, i) => {
-    const peca = document.querySelector(`[data-peca="${i}"]`);
+    const peca = caixa.querySelector(`[data-peca="${i}"]`);
     if(!peca) return;
-    const inspetor = document.querySelector(`[data-inspetor="${i}"]`);
-    const anon = d.relatorio.anonimizacao || {};
-    const ocorrencias = anon.ocorrencias || [];
+    const inspetor = caixa.querySelector(`[data-inspetor="${i}"]`);
+    const ocorrencias = (d.relatorio.anonimizacao || {}).ocorrencias || [];
 
     const inspecionar = el => {
       const tok = el.dataset.tok, tipo = el.dataset.tipo;
@@ -694,7 +1077,7 @@ function desenhar(dados, comTexto){
         <dl>
           <dt>tipo</dt><dd>${escapar(tipo)}</dd>
           <dt>no texto</dt><dd>${vezes} ocorrência(s) deste marcador</dd>
-          <dt>severidade</dt><dd>${escapar(doTipo[0]?.severidade || "—")}</dd>
+          <dt>severidade</dt><dd>${escapar((doTipo[0]||{}).severidade || "—")}</dd>
           <dt>confiança</dt><dd>${conf.length
             ? (Math.min(...conf).toFixed(2) + " a " + Math.max(...conf).toFixed(2)) : "—"}</dd>
           <dt>origem</dt><dd>${escapar(origens.join(", ") || "—")}</dd>
@@ -704,13 +1087,12 @@ function desenhar(dados, comTexto){
           O valor real não aparece aqui por desenho: o relatório não repete o dado
           que denuncia.</p>`;
     };
-
     peca.querySelectorAll("mark.tok").forEach(m => {
       m.onclick = () => inspecionar(m);
       m.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); inspecionar(m); } };
     });
 
-    const chips = document.querySelector(`[data-chips="${i}"]`);
+    const chips = caixa.querySelector(`[data-chips="${i}"]`);
     if(chips) chips.querySelectorAll(".chip").forEach(c => c.onclick = () => {
       const ligado = c.classList.toggle("on");
       chips.querySelectorAll(".chip").forEach(o => { if(o !== c) o.classList.remove("on"); });
@@ -720,19 +1102,38 @@ function desenhar(dados, comTexto){
   });
 }
 
+// ---- reidentificar --------------------------------------------------------
+function atualizarReid(){
+  $("#aviso-reid").textContent = sessao
+    ? "cofre da sessão " + sessao
+    : "nenhuma sessão aberta — anonimize algo primeiro";
+  $("#reidentificar").disabled = !sessao;
+}
+atualizarReid();
+
+$("#reidentificar").onclick = async () => {
+  const erro = $('[data-erro="reid"]');
+  erro.textContent = "";
+  const texto = $("#texto-reid").value;
+  if(!texto.trim()){ erro.textContent = "Cole o texto a reidentificar."; return; }
+  $("#reidentificar").disabled = true;
+  try{
+    const dados = await api("/api/reidentificar", {sessao, texto});
+    $("#resultado-reid").textContent = dados.texto;
+    $("#saida-reid").classList.remove("oculto");
+    erro.textContent = dados.aviso || "";
+    erro.style.color = "var(--atencao)";
+  }catch(e){
+    erro.style.color = "var(--alerta)";
+    erro.textContent = e.message;
+  }finally{ atualizarReid(); }
+};
+$("#baixar-reid").onclick = () =>
+  baixar("reidentificado.txt", $("#resultado-reid").textContent, "text/plain");
+
 // ---- sessão ---------------------------------------------------------------
 $("#baixar-cofre").onclick = () =>
   window.location = "/api/cofre?sessao=" + encodeURIComponent(sessao);
-
-$("#reidentificar").onclick = async () => {
-  const texto = prompt("Cole o texto anonimizado para reidentificar:");
-  if(!texto) return;
-  try{
-    const dados = await api("/api/reidentificar", {sessao, texto});
-    baixar("reidentificado.txt", dados.texto, "text/plain");
-    alert(dados.aviso);
-  }catch(e){ alert(e.message); }
-};
 
 $("#encerrar").onclick = async () => {
   if(!confirm("Apagar o cofre desta sessão? Os textos já anonimizados ficam irreversíveis.")) return;
@@ -740,6 +1141,8 @@ $("#encerrar").onclick = async () => {
     await api("/api/encerrar", {sessao});
     sessao = null;
     $("#painel-sessao").classList.add("oculto");
+    $("#saida-reid").classList.add("oculto");
+    atualizarReid();
   }catch(e){ alert(e.message); }
 };
 </script>

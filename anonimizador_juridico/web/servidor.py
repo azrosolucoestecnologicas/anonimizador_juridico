@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import parse_qs, urlparse
 
+from .. import defesas
 from .. import perfis as _perfis
 from .. import tipos as T
 from ..agente_auditor import AgenteAuditor
@@ -176,6 +177,8 @@ class Manipulador(BaseHTTPRequestHandler):
                 return self._anonimizar(corpo)
             if rota == "/api/auditar":
                 return self._auditar(corpo)
+            if rota == "/api/verificar":
+                return self._verificar(corpo)
             if rota == "/api/reidentificar":
                 return self._reidentificar(corpo)
             if rota == "/api/encerrar":
@@ -283,6 +286,39 @@ class Manipulador(BaseHTTPRequestHandler):
                           "nota_risco": parecer.nota_risco,
                           "relatorio": {"parecer": parecer.para_dict()}})
         self._responder({"documentos": saida, "perfil": perfil.para_dict()})
+
+    def _verificar(self, corpo: Dict[str, Any]) -> None:
+        """Varredura de injeção isolada — o mesmo porteiro do `verificar` da CLI.
+
+        Serve a quem já anonimiza de outro jeito e só quer saber se o arquivo
+        carrega instrução dirigida a IA antes de jogá-lo num resumidor ou num
+        RAG. Não anonimiza nada e não abre sessão: por isso o trecho sai em
+        claro, que é o contrário da regra dos achados de dado pessoal — aqui
+        quem revisa precisa ler o texto para julgar.
+        """
+        documentos = self._reunir_documentos(corpo)
+        if not documentos:
+            return self._erro("nenhum documento enviado")
+
+        saida = []
+        for nome, texto, erro in documentos:
+            if erro:
+                saida.append({"nome": nome, "erro": erro})
+                continue
+            alertas = defesas.detectar(texto)
+            parecer = T.Parecer(
+                aprovado=not alertas,
+                nota_risco=min(sum(T.PESO_SEVERIDADE.get(a.gravidade, 5)
+                                   for a in alertas), 100),
+                achados=alertas,
+                verificacoes={"injecao": f"{len(alertas)} achado(s)"})
+            saida.append({"nome": nome,
+                          "aprovado": parecer.aprovado,
+                          "quarentena": bool(alertas),
+                          "nota_risco": parecer.nota_risco,
+                          "caracteres": len(texto),
+                          "relatorio": {"parecer": parecer.para_dict()}})
+        self._responder({"documentos": saida})
 
     def _reidentificar(self, corpo: Dict[str, Any]) -> None:
         sessao = self.repositorio.obter(corpo.get("sessao"))
