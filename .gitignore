@@ -1,0 +1,22 @@
+cd ~/Documentos/anonimizador_juridico
+cat > .gitignore <<'EOF'
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Artefatos de execução — o cofre reidentifica a peça, nunca versionar
+cofre*.json
+*.cofre.json
+*.key
+peca*.txt
+saida*.txt
+*_anon.txt
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+EOF
