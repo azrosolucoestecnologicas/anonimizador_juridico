@@ -134,6 +134,34 @@
   .capa .kicker::after{background:rgba(245,239,228,.2)}
   .capa h2{color:var(--cream);font-size:31px;line-height:1.18;max-width:20ch;
     margin-bottom:14px}
+
+  /* placa de identificação, à direita da capa */
+  .capa-topo{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:34px;
+    align-items:start}
+  @media (max-width:900px){ .capa-topo{grid-template-columns:1fr} }
+  .chapa{border:1px solid rgba(184,115,51,.55);border-radius:var(--raio);
+    background:linear-gradient(180deg,rgba(245,239,228,.09),rgba(245,239,228,.03));
+    box-shadow:inset 0 1px 0 rgba(245,239,228,.16), 0 2px 8px rgba(0,0,0,.35);
+    padding:22px 20px;text-align:right}
+  @media (max-width:900px){ .chapa{text-align:left} }
+  .chapa-logo{width:52px;height:auto;display:block;margin:0 0 16px auto}
+  @media (max-width:900px){ .chapa-logo{margin-left:0} }
+  /* `.capa p` tem a mesma especificidade e vem antes: sem o `.capa` na frente
+     o nome herdava o corpo de texto e ficava do tamanho do parágrafo. */
+  .capa .chapa-nome{margin:0;max-width:none;
+    font:400 30px/1.1 var(--font-display);
+    letter-spacing:-.02em;color:var(--cream);
+    /* gravação: sombra escura embaixo e luz fina em cima */
+    text-shadow:0 1px 0 rgba(0,0,0,.55), 0 -1px 0 rgba(245,239,228,.10)}
+  .capa .chapa-nome span{color:var(--copper-soft);font-style:italic;font-weight:300}
+  .capa .chapa-linha{margin:14px 0 0;padding-top:13px;max-width:none;
+    border-top:1px solid rgba(245,239,228,.14);
+    font:500 9.5px/1.6 var(--font-mono);letter-spacing:.13em;text-transform:uppercase;
+    color:rgba(245,239,228,.50)}
+  .chapa-meta{margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;
+    gap:5px 14px;font:400 10.5px/1.5 var(--font-mono);letter-spacing:.06em}
+  .chapa-meta dt{text-transform:uppercase;color:rgba(245,239,228,.40);text-align:left}
+  .chapa-meta dd{margin:0;color:var(--copper-soft);text-align:right}
   .capa .destaque{color:var(--copper-soft);font-style:italic;font-weight:300}
   .capa p{color:rgba(245,239,228,.82);font-size:15.5px;max-width:62ch;margin:0 0 12px}
   .capa p:last-child{margin-bottom:0}
@@ -481,6 +509,8 @@
 <section class="painel" id="painel-inicio" role="tabpanel">
 
   <div class="capa">
+   <div class="capa-topo">
+    <div class="capa-texto">
     <p class="kicker">Por que esta ferramenta existe</p>
     <h2>Pedir à IA que anonimize <span class="destaque">já entrega o dado a ela.</span></h2>
     <p>Se você manda a petição crua para um modelo e pede "remova os dados pessoais",
@@ -493,6 +523,30 @@
        — se você quiser — já está mascarado. É por isso que esta ferramenta é uma
        <b>etapa de preparação</b>: rode a peça por aqui e leve o resultado para
        qualquer IA da sua escolha, sem entregar dado de cliente a ninguém.</p>
+    </div>
+
+    <!-- placa de identificação: o vazio à direita era espaço de sobra -->
+    <aside class="chapa" aria-hidden="true">
+      <svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg" class="chapa-logo">
+        <g fill="none" stroke="#F5EFE4" stroke-width="11" stroke-linecap="round"
+           stroke-linejoin="round" opacity=".92">
+          <path d="M 12 118 L 55 12"/><path d="M 55 12 L 98 118"/>
+          <path d="M 32 76 L 78 76" stroke-width="8"/>
+          <path d="M 98 12 L 138 12 Q 165 12 165 42 Q 165 68 138 68 L 98 68"/>
+          <path d="M 130 68 L 168 118"/>
+        </g>
+        <circle cx="55" cy="12" r="7" fill="#B87333"/>
+      </svg>
+      <p class="chapa-nome">Anonimizador<br>de dados<br><span>para IA</span></p>
+      <p class="chapa-linha">Anonimizador de peças judiciais</p>
+      <dl class="chapa-meta">
+        <dt>modelo</dt><dd>dois agentes</dd>
+        <dt>núcleo</dt><dd>determinístico</dd>
+        <dt>rede</dt><dd>não exigida</dd>
+        <dt>versão</dt><dd id="chapa-versao">—</dd>
+      </dl>
+    </aside>
+   </div>
 
     <div class="fluxo">
       <div class="etapa"><span class="n">01</span><b>Você envia a peça</b>
@@ -914,6 +968,7 @@ function desenharPerfis(alvo, chave){
 
 api("/api/estado").then(estado => {
   $("#versao").textContent = "v" + estado.versao;
+  $("#chapa-versao").textContent = estado.versao;
   formatos = estado.formatos;
   listaPerfis = estado.perfis;
   $$(".zona .formatos").forEach(s => s.textContent = "aceita " + formatos.join("  ·  "));
